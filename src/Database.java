@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class Database {
 
-	//static double value = 0;
+	static double value = 168;
 	private ArrayList<Double> temperaturListe;
 	private ArrayList<Integer> pulsListe;
 	private int tempKald = 0;
@@ -45,13 +45,13 @@ public class Database {
 	public double getTemp() {
 		if (tempKald < temperaturListe.size()) {
 			double maaling = temperaturListe.get(tempKald);
-			maaling = (maaling * 4 / 50) + 24;
+			//maaling = (maaling * 4 / 50) + 24;
 			tempKald++;
 			return maaling;
 		} else {
 			tempKald = 0;
 			double maaling = temperaturListe.get(tempKald);
-			maaling = (maaling * 4 / 50) + 24;
+			//maaling = (maaling * 4 / 50) + 24;
 			tempKald++;
 			return maaling;
 		}
@@ -79,7 +79,7 @@ public class Database {
 		}
 	}*/
 
-	/*public static double genererMaaling() {
+	public static int genererMaaling() {
 		value += (2 * Math.random() - 1.0) * 0.25;
 		if (value < 0) {
 			value = 0;
@@ -88,7 +88,6 @@ public class Database {
 			value = 255;
 		}
 
-		return (double) value;
-
-	}*/
+		return (int) value;
+	}
 }

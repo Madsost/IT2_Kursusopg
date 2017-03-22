@@ -49,15 +49,17 @@ public class Graf extends JPanel {
         }, 0, updateRate);
     }
 
-    public void tegnPunkt(Graphics g) {
+    public void tegnPunkt(Graphics2D g2) {
         double punkt = 0;
         if (brugTemp) {
-            punkt = (int) dtb.getTemp() * 10;
+            punkt = Database.genererMaaling();
+            //System.out.println(punkt);
             inddataTemp.add(punkt);
+
             if (inddataTemp.size() >= 2) {
                 for (int j = 1; j < inddataTemp.size() - 1; j++) {
-                    //g.drawLine(j - 1, (int) (inddataTemp.get(j - 1)*10), j, (int) (inddataTemp.get(j)*10));
-                    g.fillOval(j, (int) (inddataTemp.get(j) * 10), 10, 10);
+                    //g2.drawLine(j - 1, (inddataTemp.get(j - 1).intValue()), j, (int) (inddataTemp.get(j).intValue()));
+                    g2.drawOval(j, (inddataTemp.get(j).intValue()), 1,15);
                 }
             }
         } else {
@@ -65,8 +67,7 @@ public class Graf extends JPanel {
             inddataPuls.add(punkt2);
             if (inddataPuls.size() >= 2) {
                 for (int j = 1; j < inddataPuls.size() - 1; j++) {
-
-                    g.drawLine(j - 1, (int) (inddataPuls.get(j - 1)), j, (int) (inddataPuls.get(j)));
+                    g2.drawLine(j - 1, (int) (inddataPuls.get(j - 1)), j, (int) (inddataPuls.get(j)));
                 }
             }
         }
@@ -92,8 +93,8 @@ public class Graf extends JPanel {
         int step = 0;
         if (brugTemp) {
             xMax = 60;
-            yMax = 5000;
-            step = 1;
+            yMax = 255;
+            step = 20;
 
         } else {
             xMax = 600;
@@ -113,13 +114,13 @@ public class Graf extends JPanel {
         g2.drawLine(0, 0, (int) xMax, 0);
         g2.drawLine(0, 0, 0, (int) yMax);
 
-        for (int i = step; i <= xMax; i += step) {
+        for (int i = 0; i <= xMax; i += step) {
             g2.drawLine(i, -5, i, 10);
         }
         /*for (int i = step; i <= yMax; i += step) {
             g.drawLine(-5, i, 5, i);
         }*/
-        tegnPunkt(g);
+        tegnPunkt(g2);
 
     }
 
