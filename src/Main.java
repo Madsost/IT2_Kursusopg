@@ -66,7 +66,7 @@ public class Main {
 	public static void main(String[] args) {
 		dtb = new Database();
 		Main main = new Main();
-		EtPanel gui = new EtPanel(dtb);
+		GUI gui = new GUI(dtb);
 		
 
 	}

@@ -25,7 +25,7 @@ import javax.swing.JTextField;
  *
  * @author madso
  */
-public class EtPanel extends javax.swing.JPanel {
+public class GUI extends javax.swing.JPanel {
 	Database dtb;
 	private double latestTemp = 0;
 	private double minTemperatur = 2000;
@@ -39,7 +39,7 @@ public class EtPanel extends javax.swing.JPanel {
 	/**
 	 * Creates new form EtPanel
 	 */
-	public EtPanel(Database dtb) {
+	public GUI(Database dtb) {
 		this.dtb = dtb;
 		initComponents();
 		JFrame vindue = new JFrame();

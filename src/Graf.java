@@ -99,7 +99,7 @@ public class Graf extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (EtPanel.isActive) {
+		if (GUI.isActive) {
 			Graphics2D g2 = (Graphics2D) g;
 			AffineTransform af = new AffineTransform();
 
