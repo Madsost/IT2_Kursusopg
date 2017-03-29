@@ -9,11 +9,13 @@
  * @author madso
  */
 public class EtPanel extends javax.swing.JPanel {
-
+	Database dtb;
+	
     /**
      * Creates new form EtPanel
      */
     public EtPanel() {
+    	dtb = new Database();
         initComponents();
     }
     
@@ -74,7 +76,7 @@ public class EtPanel extends javax.swing.JPanel {
 
         stop = new javax.swing.JButton();
         startKnap = new javax.swing.JButton();
-        grafOmraade = new javax.swing.JPanel();
+        grafOmraade = new Graf("puls",dtb);
         jLabel3 = new javax.swing.JLabel();
         aktuelPuls = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -90,7 +92,7 @@ public class EtPanel extends javax.swing.JPanel {
         maxTemp = new javax.swing.JTextField();
         aktuelTemp = new javax.swing.JTextField();
         jTextField16 = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new Graf("temp",dtb);
         minTemp = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
