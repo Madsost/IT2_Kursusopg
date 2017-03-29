@@ -78,8 +78,12 @@ public class Database {
 
 		}
 	}*/
+	
+	public ArrayList<Integer> getPulsListe(){
+		return pulsListe;
+	}
 
-	public static int genererMaaling() {
+	public static double genererMaaling() {
 		value += (2 * Math.random() - 1.0) * 0.25;
 		if (value < 0) {
 			value = 0;
@@ -88,6 +92,8 @@ public class Database {
 			value = 255;
 		}
 
-		return (int) value;
+		return value;
 	}
+	
+	
 }
