@@ -22,6 +22,8 @@ import javax.swing.*;
  * @author madso
  */
 public class IT2_KursusOpg {
+	
+	// HEJ aline
 
     /**
      * @param args the command line arguments
