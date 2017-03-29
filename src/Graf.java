@@ -48,6 +48,18 @@ public class Graf extends JPanel {
 
         }, 0, updateRate);
     }
+    
+    public int getPuls(){
+    	
+    	
+    	return 0;
+    }
+    
+    public double getTemp(){
+    	
+    	
+    	return 0.0;
+    }
 
     public void tegnPunkt(Graphics2D g2) {
         double punkt = 0;
@@ -58,8 +70,8 @@ public class Graf extends JPanel {
 
             if (inddataTemp.size() >= 2) {
                 for (int j = 1; j < inddataTemp.size() - 1; j++) {
-                    //g2.drawLine(j - 1, (inddataTemp.get(j - 1).intValue()), j, (int) (inddataTemp.get(j).intValue()));
-                    g2.drawOval(j, (inddataTemp.get(j).intValue()), 1,15);
+                    g2.drawLine(j - 1, (inddataTemp.get(j - 1).intValue()), j, (int) (inddataTemp.get(j).intValue()));
+                    //g2.drawOval(j, (inddataTemp.get(j).intValue()), 1,15);
                 }
             }
         } else {
@@ -72,10 +84,12 @@ public class Graf extends JPanel {
             }
         }
         if (inddataPuls.size() > xMax) {
-            inddataPuls = new ArrayList<>();
+        	inddataPuls = new ArrayList<>();
+            //inddataPuls.remove(0);
         }
         if (inddataTemp.size() > xMax) {
-            inddataTemp = new ArrayList<>();
+        	//inddataTemp = new ArrayList<>(); 
+            inddataTemp.remove(0);
         } else {
 
         }
@@ -117,9 +131,9 @@ public class Graf extends JPanel {
         for (int i = 0; i <= xMax; i += step) {
             g2.drawLine(i, -5, i, 10);
         }
-        /*for (int i = step; i <= yMax; i += step) {
+        for (int i = step; i <= yMax; i += step) {
             g.drawLine(-5, i, 5, i);
-        }*/
+        }
         tegnPunkt(g2);
 
     }
