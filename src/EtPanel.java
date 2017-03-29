@@ -16,6 +16,52 @@ public class EtPanel extends javax.swing.JPanel {
     public EtPanel() {
         initComponents();
     }
+    
+    //Metode, der sætter max temp grænse
+    public void setgMaxTemp(String temp){
+        gMaxTemp.setText(""+temp);
+        
+    }
+    
+    //Metode, der sætter min temp grænse
+    public void setgMinTemp(String temp){
+        gMinTemp.setText(""+temp);
+        
+    }
+    
+    //Metode, der sætter max puls grænse
+    public void setgMaxPuls(String puls){
+        gMaxPuls.setText(""+puls);
+        
+    }
+    
+    //Metode, der sætter min puls grænse
+    public void setgMinPuls(String puls){
+        gMinPuls.setText(""+puls);
+        
+    }
+    
+    //Metode, der skal tjekke om den aktuelle temperatur er den højest eller laveste målt
+    public void måltTemp(int temp){
+        
+       // if (temp < maxTemp)
+    }
+    
+    //Metode, der skal tjekke om den aktuelle puls er den højest eller laveste målt
+    public void måltPuls(int puls){
+        
+       // maxPuls = Integer.parseInt(maxPuls);
+        
+        
+       /* if (puls > maxTemp){
+                maxPuls = "" + puls
+                maxPuls.setText();
+          } else if(puls < minTemp){
+                minPuls = 
+        }
+        
+        */
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,30 +74,30 @@ public class EtPanel extends javax.swing.JPanel {
 
         stop = new javax.swing.JButton();
         startKnap = new javax.swing.JButton();
-        grafOmraade = new Graf("puls",new Database());
+        grafOmraade = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        aktuelPuls = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        maxPuls = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
-        jTextField13 = new javax.swing.JTextField();
-        jTextField14 = new javax.swing.JTextField();
-        jTextField15 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        gMinPuls = new javax.swing.JTextField();
+        minPuls = new javax.swing.JTextField();
+        gMaxPuls = new javax.swing.JTextField();
+        maxTemp = new javax.swing.JTextField();
+        aktuelTemp = new javax.swing.JTextField();
         jTextField16 = new javax.swing.JTextField();
-        TempGraf = new Graf("temp", new Database());
-        jTextField8 = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        minTemp = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        gMaxTemp = new javax.swing.JTextField();
+        gMinTemp = new javax.swing.JTextField();
 
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         setPreferredSize(new java.awt.Dimension(1200, 700));
@@ -81,30 +127,30 @@ public class EtPanel extends javax.swing.JPanel {
         jLabel3.setText("Temp");
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jTextField4.setEditable(false);
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(0, 204, 0));
-        jTextField4.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField4.setText("183");
-        jTextField4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        aktuelPuls.setEditable(false);
+        aktuelPuls.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        aktuelPuls.setForeground(new java.awt.Color(0, 204, 0));
+        aktuelPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        aktuelPuls.setText("183");
+        aktuelPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel1.setText("Puls");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jTextField5.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField5.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField5.setText("200");
-        jTextField5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        maxPuls.setBackground(new java.awt.Color(240, 240, 240));
+        maxPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        maxPuls.setText("200");
+        maxPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jLabel2.setText("Max");
+        jLabel2.setText("Max målt");
 
-        jLabel4.setText("Min");
+        jLabel4.setText("Min målt");
 
-        jLabel5.setText("Maxgrænse");
+        jLabel5.setText("Max grænse");
 
-        jLabel6.setText("Mingrænse");
+        jLabel6.setText("Min grænse");
 
         jTextField12.setEditable(false);
         jTextField12.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -118,32 +164,42 @@ public class EtPanel extends javax.swing.JPanel {
             }
         });
 
-        jTextField13.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField13.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField13.setText("180");
-        jTextField13.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gMinPuls.setBackground(new java.awt.Color(240, 240, 240));
+        gMinPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        gMinPuls.setText("180");
+        gMinPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTextField14.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField14.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField14.setText("10");
-        jTextField14.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        minPuls.setBackground(new java.awt.Color(240, 240, 240));
+        minPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        minPuls.setText("10");
+        minPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTextField15.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField15.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField15.setText("20");
-        jTextField15.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gMaxPuls.setBackground(new java.awt.Color(240, 240, 240));
+        gMaxPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        gMaxPuls.setText("20");
+        gMaxPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gMaxPuls.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gMaxPulsActionPerformed(evt);
+            }
+        });
 
-        jTextField6.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField6.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField6.setText("36.7");
-        jTextField6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        maxTemp.setBackground(new java.awt.Color(240, 240, 240));
+        maxTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        maxTemp.setText("36.7");
+        maxTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTextField7.setEditable(false);
-        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jTextField7.setForeground(new java.awt.Color(51, 51, 255));
-        jTextField7.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField7.setText("37.1");
-        jTextField7.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        aktuelTemp.setEditable(false);
+        aktuelTemp.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        aktuelTemp.setForeground(new java.awt.Color(51, 51, 255));
+        aktuelTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        aktuelTemp.setText("37.1");
+        aktuelTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        aktuelTemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aktuelTempActionPerformed(evt);
+            }
+        });
 
         jTextField16.setEditable(false);
         jTextField16.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -157,41 +213,52 @@ public class EtPanel extends javax.swing.JPanel {
             }
         });
 
-        TempGraf.setPreferredSize(new java.awt.Dimension(800, 105));
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 105));
 
-        javax.swing.GroupLayout TempGrafLayout = new javax.swing.GroupLayout(TempGraf);
-        TempGraf.setLayout(TempGrafLayout);
-        TempGrafLayout.setHorizontalGroup(
-            TempGrafLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 822, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 818, Short.MAX_VALUE)
         );
-        TempGrafLayout.setVerticalGroup(
-            TempGrafLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 226, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 222, Short.MAX_VALUE)
         );
 
-        jTextField8.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField8.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField8.setText("35.1");
-        jTextField8.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        minTemp.setBackground(new java.awt.Color(240, 240, 240));
+        minTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        minTemp.setText("35.1");
+        minTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        minTemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minTempActionPerformed(evt);
+            }
+        });
 
-        jLabel7.setText("Max");
+        jLabel7.setText("Max målt");
 
-        jLabel8.setText("Min");
+        jLabel8.setText("Min målt");
 
-        jLabel9.setText("Maxgrænse");
+        jLabel9.setText("Max grænse");
 
-        jLabel10.setText("Mingrænse");
+        jLabel10.setText("Min grænse");
 
-        jTextField9.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField9.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField9.setText("35.1");
-        jTextField9.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gMaxTemp.setBackground(new java.awt.Color(240, 240, 240));
+        gMaxTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        gMaxTemp.setText("35.1");
+        gMaxTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gMaxTemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gMaxTempActionPerformed(evt);
+            }
+        });
 
-        jTextField10.setBackground(new java.awt.Color(240, 240, 240));
-        jTextField10.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField10.setText("35.1");
-        jTextField10.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gMinTemp.setBackground(new java.awt.Color(240, 240, 240));
+        gMinTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        gMinTemp.setText("35.1");
+        gMinTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -216,11 +283,11 @@ public class EtPanel extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(maxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(aktuelTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel4)
@@ -234,21 +301,21 @@ public class EtPanel extends javax.swing.JPanel {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(aktuelPuls, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jTextField14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addComponent(jTextField15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addComponent(maxPuls, javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(minPuls, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(gMaxPuls, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(gMinPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(gMaxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(gMinTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(minTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(82, 82, 82)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TempGraf, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
                             .addComponent(grafOmraade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
@@ -264,31 +331,31 @@ public class EtPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(aktuelTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(maxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(minTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(gMaxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(gMinTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10)))
-                    .addComponent(TempGraf, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(grafOmraade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(stop)
                             .addComponent(startKnap))
@@ -296,7 +363,7 @@ public class EtPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(aktuelPuls, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,17 +372,17 @@ public class EtPanel extends javax.swing.JPanel {
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel4))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(maxPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
-                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(minPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(gMaxPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(gMinPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
 
@@ -334,9 +401,30 @@ public class EtPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField16ActionPerformed
 
+    private void minTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minTempActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_minTempActionPerformed
+
+    private void gMaxTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gMaxTempActionPerformed
+        
+    }//GEN-LAST:event_gMaxTempActionPerformed
+
+    private void gMaxPulsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gMaxPulsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_gMaxPulsActionPerformed
+
+    private void aktuelTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aktuelTempActionPerformed
+        
+    }//GEN-LAST:event_aktuelTempActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel TempGraf;
+    private javax.swing.JTextField aktuelPuls;
+    private javax.swing.JTextField aktuelTemp;
+    private javax.swing.JTextField gMaxPuls;
+    private javax.swing.JTextField gMaxTemp;
+    private javax.swing.JTextField gMinPuls;
+    private javax.swing.JTextField gMinTemp;
     private javax.swing.JPanel grafOmraade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -348,19 +436,15 @@ public class EtPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField10;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField maxPuls;
+    private javax.swing.JTextField maxTemp;
+    private javax.swing.JTextField minPuls;
+    private javax.swing.JTextField minTemp;
     private javax.swing.JButton startKnap;
     private javax.swing.JButton stop;
     // End of variables declaration//GEN-END:variables
 }
+
