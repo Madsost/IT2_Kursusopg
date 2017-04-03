@@ -15,7 +15,35 @@ import java.util.stream.*;
  */
 public class Main {
 
-	// HEJ aline
+	private Database datb;
+	private PulseSensor puls;
+	private TempSensor temp;
+
+	public void init() {
+		// Lav 2 sensor-objekter i hver deres tråd
+		// Opret GUI-objekt
+		// Mere?
+	}
+
+	public void run() {
+		/*
+		 * Alt det der skal ske i Main. 1) Indhente målinger fra sensorer 2)
+		 * Kontrollere data 3) Beregne puls/etwas 4) Gemme i databasen 4)
+		 * Opdatere GUI (måske?)
+		 * 
+		 */
+	}
+
+	public void validate() {
+		/*
+		 * Noget med en boolean for grænseværdierne De skal så nok hentes heri -
+		 * eller i run()...
+		 */
+	}
+
+	
+	
+	/*--------------- GAMMEL KODE -------------*/
 
 	String[] dataArray; // De 1000 målinger som streng
 	static Database dtb;
@@ -33,20 +61,20 @@ public class Main {
 		gennemsnit = 0.0; // Resetter gennemsnittet ved hvert gennemløb
 		ArrayList<Integer> input = dtb.getPulsListe();
 		saveArray = new int[input.size()];
-		for (int i = 0; i < saveArray.length; i++) { 
+		for (int i = 0; i < saveArray.length; i++) {
 			saveArray[i] = input.get(i);
 		}
 		int sum = IntStream.of(saveArray).sum(); // Vi får summen fra vores
 													// array.
 		gennemsnit = sum / saveArray.length * 1.1;
 		count = 0;
-		for (int i = 0; i < saveArray.length; i++) { 
+		for (int i = 0; i < saveArray.length; i++) {
 			// Hvis en måling er højere end gennemsnittet + 10%, tælles et slag
-			if (saveArray[i] > gennemsnit && !overMax) { 
+			if (saveArray[i] > gennemsnit && !overMax) {
 				overMax = true;
-				count ++;
+				count++;
 			}
-			if (saveArray[i] < gennemsnit && overMax) { 
+			if (saveArray[i] < gennemsnit && overMax) {
 				// Når en måling kommer under gennemsnittet + 10%, sættes
 				// overMax til false
 				overMax = false;
@@ -67,7 +95,5 @@ public class Main {
 		dtb = new Database();
 		Main main = new Main();
 		GUI gui = new GUI(dtb);
-		
-
 	}
 }

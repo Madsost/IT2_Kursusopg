@@ -380,29 +380,29 @@ public class GUI extends javax.swing.JPanel {
 
         gMinPuls.setBackground(new java.awt.Color(240, 240, 240));
         gMinPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        gMinPuls.setText("180");
+        gMinPuls.setText("");
         gMinPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         minPuls.setBackground(new java.awt.Color(240, 240, 240));
         minPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        minPuls.setText("10");
+        minPuls.setText("");
         minPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         gMaxPuls.setBackground(new java.awt.Color(240, 240, 240));
         gMaxPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        gMaxPuls.setText("20");
+        gMaxPuls.setText("");
         gMaxPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         maxTemp.setBackground(new java.awt.Color(240, 240, 240));
         maxTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        maxTemp.setText("36.7");
+        maxTemp.setText("");
         maxTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         aktuelTemp.setEditable(false);
         aktuelTemp.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         aktuelTemp.setForeground(new java.awt.Color(51, 51, 255));
         aktuelTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        aktuelTemp.setText("37.1");
+        aktuelTemp.setText("");
         aktuelTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTextField16.setEditable(false);
@@ -432,7 +432,7 @@ public class GUI extends javax.swing.JPanel {
 
         minTemp.setBackground(new java.awt.Color(240, 240, 240));
         minTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        minTemp.setText("35.1");
+        minTemp.setText("");
         minTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel7.setText("Max");
@@ -445,12 +445,12 @@ public class GUI extends javax.swing.JPanel {
 
         gMaxTemp.setBackground(new java.awt.Color(240, 240, 240));
         gMaxTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        gMaxTemp.setText("35.1");
+        gMaxTemp.setText("");
         gMaxTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         gMinTemp.setBackground(new java.awt.Color(240, 240, 240));
         gMinTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        gMinTemp.setText("35.1");
+        gMinTemp.setText("");
         gMinTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         dangerLabelTemp.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N

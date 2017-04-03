@@ -15,6 +15,32 @@ import java.util.*;
  * @author madso
  */
 public class Graf extends JPanel {
+	
+	/*
+	 * Her skal vi tage stilling til nogle ting..
+	 * 
+	 * Vi kan godt fortsat tegne med Graphics2D, men måske
+	 * skal det ikke være med affin transformation... 
+	 * 
+	 * Det kunne være rart med nogle pænere akser :-) 
+	 * Hvis vi fortsætter med Graphics(2D) skal vi se på 
+	 * at tegne det lidt mere lavpraktisk
+	 * 
+	 * Desuden vil vi nok gerne bruge et interface til at 
+	 * samle graftegnerne i to separate klasser. 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * Hvis vi gerne vil prøve med JFreeChart så skal det her laves
+	 * helt om. Der er en hjemmeside med en guide til det her;
+	 * 
+	 * http://www.tutorialspoint.com/jfreechart/index.htm
+	 * 
+	 * Og så skal vi se lidt på hvordan vi sikrer os at data 
+	 * er de samme igennem hele brugergrænsefladen
+	 * 
+	 */
 
 	Database dtb;
 	String puls = "puls";
@@ -137,6 +163,7 @@ public class Graf extends JPanel {
 				g.drawLine(-5, i, 5, i);
 			}
 			tegnPunkt(g2);
+			
 		} 	
 			
 

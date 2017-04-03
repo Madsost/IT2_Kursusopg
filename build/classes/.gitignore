@@ -27,3 +27,6 @@
 /GUI$8.class
 /GUI$9.class
 /GUI.class
+/Sensor.class
+/PulseSensor.class
+/TempSensor.class

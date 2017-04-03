@@ -13,7 +13,51 @@ import java.util.Scanner;
  * @author super
  */
 public class Database {
+	/*
+	 * Denne klasse skal oprette forbindelse til databasen
+	 * - den skal kunne skrive målinger dertil
+	 * - den skal kunne returnere målinger
+	 * 
+	 * Attributter her:
+	 */
+	private String standardSelect, standardInsert;
+	private String url, password, user; // osv. 
 
+	public Database(String hej){
+		// Konstruktør 
+		
+		// Kald noget init af en art 
+		// Skal der ske andet?
+	}
+	
+	public void initConn(){
+		// Her skal vi initialisere forbindelsen til serveren
+		
+		// Undersøg om databasen eksisterer
+		// Hvis den ikke gør; opret.
+		// Vil vi have en database for hver session?!
+		
+		try{ /* Noget */ } catch(Exception e){ /* Fejlhåndtering */ }
+	}
+	
+	public void writeTo(String parameter1, String parameter2){
+		// Skriv til databasen - måske er parameter1 typen og parameter2 er selve målingen
+		
+		try{ /* Noget */ } catch(Exception e){ /* Fejlhåndtering */ }
+	}
+	
+	public void getValue(/* nogle parametre */){
+		// Hent målinger fra databasen med nogle bestemte 
+		
+		try{ /* Noget */ } catch(Exception e){ /* Fejlhåndtering */ }
+	}
+	
+	
+	
+	
+	
+	// --------- GAMMEL KODE ------------- //
+	
 	static double value = 168;
 	private ArrayList<Double> temperaturListe;
 	private ArrayList<Integer> pulsListe;
