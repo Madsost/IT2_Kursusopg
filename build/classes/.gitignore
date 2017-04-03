@@ -30,3 +30,7 @@
 /Sensor.class
 /PulseSensor.class
 /TempSensor.class
+/Graf_Interface.class
+/Graf_Temp.class
+/Graf_Pulse.class
+/Graf_JFreeChart.class
