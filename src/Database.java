@@ -40,6 +40,14 @@ public class Database {
 		try{ /* Noget */ } catch(Exception e){ /* Fejlhåndtering */ }
 	}
 	
+	public void initTable(String name){
+		
+	}
+	
+	public void dropTable(String name){
+		
+	}
+	
 	public void writeTo(String parameter1, String parameter2){
 		// Skriv til databasen - måske er parameter1 typen og parameter2 er selve målingen
 		

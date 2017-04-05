@@ -1,5 +1,5 @@
 
-public class PulseSensor extends Sensor {
+public class PulseSensor extends Sensor implements Runnable{
 	/*
 	 * Puls-specifikke attributter
 	 * */
@@ -24,5 +24,11 @@ public class PulseSensor extends Sensor {
 		 * Puls-specifik metode for at hente måling. 
 		 */
 		return 0;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }

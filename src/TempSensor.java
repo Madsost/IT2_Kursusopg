@@ -1,5 +1,5 @@
 
-public class TempSensor extends Sensor{
+public class TempSensor extends Sensor implements Runnable{
 	/*
 	 * Temp-specifikke attributter
 	 */
@@ -16,5 +16,11 @@ public class TempSensor extends Sensor{
 		 * Her skal der stå noget mere.
 		 */
 		return 0;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }
