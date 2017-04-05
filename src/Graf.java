@@ -105,8 +105,9 @@ public class Graf extends JPanel {
 			int punkt2 = dtb.getPuls();
 			inddataPuls.add(punkt2);
 			if (inddataPuls.size() >= 2) {
-				for (int j = 1; j < inddataPuls.size() - 1; j++) {
-					g2.drawLine(j - 1, (int) (inddataPuls.get(j - 1)), j, (int) (inddataPuls.get(j)));
+				g2.setColor(Color.red);
+				for (int i = 0; i < inddataPuls.size(); i++) {
+					g2.fillRoundRect(i, inddataPuls.get(i), 10, 10, 2, 5);
 				}
 			}
 		}

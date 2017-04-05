@@ -1,4 +1,6 @@
 import java.awt.Graphics;
+import java.awt.*;
+
 import javax.swing.Timer;
 import javax.swing.JPanel;
 
@@ -15,18 +17,18 @@ public class Graf_Temp extends JPanel implements Graf_Interface{
 	}
 	
 	@Override
-	public void drawAxis(Graphics g) {
+	public void drawAxis(Graphics2D g) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void drawGraph(Graphics g) {
+	public void drawGraph(Graphics2D g) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	
 	public void setData() {
 		// TODO Auto-generated method stub
 		

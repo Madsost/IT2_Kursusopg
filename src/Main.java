@@ -18,10 +18,36 @@ public class Main {
 	private Database datb;
 	private PulseSensor puls;
 	private TempSensor temp;
+	private GUI gui;
+	private boolean dangerPulse;
+	private boolean dangerTemp;
+	
+	public Main(){
+		this.dangerPulse = false;
+		this.dangerTemp = false;
+	}
 
 	public void init() {
 		// Lav 2 sensor-objekter i hver deres tråd
-		// Opret GUI-objekt
+		temp = new TempSensor();
+		puls = new PulseSensor();
+		Thread sensorT = new Thread(temp);
+		Thread sensorP = new Thread(puls);
+		
+		// set sensor-trådene til daemon
+		sensorT.setDaemon(true);
+		sensorP.setDaemon(true);
+		
+		// start de to tråde
+		sensorT.start();
+		sensorP.start();
+		
+		// init databbasen
+		datb = new Database();
+		
+		// Opret GUI-objekt med databasen som parameter
+		gui = new GUI(datb);
+		
 		// Mere?
 	}
 
@@ -30,13 +56,14 @@ public class Main {
 		 * Alt det der skal ske i Main. 1) Indhente målinger fra sensorer 2)
 		 * Kontrollere data 3) Beregne puls/etwas 4) Gemme i databasen 4)
 		 * Opdatere GUI (måske?)
-		 * 
 		 */
+		
+		
 	}
 
 	public void validate() {
 		/*
-		 * Noget med en boolean for grænseværdierne De skal så nok hentes heri -
+		 * Noget med en boolean for grænseværdierne. De skal så nok hentes heri -
 		 * eller i run()...
 		 */
 	}
