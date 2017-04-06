@@ -143,6 +143,8 @@ public class Database {
 		if (value > 255) {
 			value = 255;
 		}
+                
+                value = (value * 4 / 50) + 24;
 
 		return value;
 	}

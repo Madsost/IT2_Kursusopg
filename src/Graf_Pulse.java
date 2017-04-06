@@ -1,122 +1,123 @@
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
-
+import java.awt.geom.Line2D;
 import javax.swing.*;
 
-public class Graf_Pulse extends JPanel implements Graf_Interface {
-	private Timer timer;
-	private int speed = 3000;
-	private Database datb;
-	private int maxX = 600;
-	private int minX = -1;
-	private int minY = -1;
-	private int maxY = 1024;
-	private int trinX = 200;
-	private int trinY = 400;
-	private ArrayList<Integer> dataToDraw;
+public class Graf_Pulse extends Graf_Interface {
 
-	public Graf_Pulse(Database datb) {
-		//speed = 5;
-		this.datb = datb;
-		setData(/* datb.getPulsListe() */);
-		ActionListener taskPerformer = new ActionListener() {
+    private Timer timer;
+    private int speed = 3000;
+    private Database datb;
+    private int maxX = 600;
+    private int minX = -10;
+    private int minY = -10;
+    private int maxY = 1024;
+    private int trinX = 200;
+    private int trinY = 400;
+    private double deltaX, deltaY;
+    private ArrayList<Integer> dataToDraw;
 
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				setData(/* datb.getPulsListe() */);
-				repaint();
+    public Graf_Pulse() {
+        dataToDraw = new ArrayList<Integer>();
+        ActionListener taskPerformer = new ActionListener() {
 
-			}
-		};
-		this.timer = new Timer(speed, taskPerformer);
-	}
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                /*
+				 * dataToDraw = datb.getValues("puls");
+                 */
+                setVisible(true);
+                setData(/* datb.getPulsListe() */);
+                repaint();
 
-	public void begin() {
-		timer.start();
-	}
+            }
+        };
+        timer = new Timer(speed, taskPerformer);
+        timer.setInitialDelay(0);
+        //setVisible(false);
+    }
 
-	public void stop() {
-		timer.stop();
-	}
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        AffineTransform af = new AffineTransform();
+        g2.setColor(getBackground());
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		AffineTransform af = new AffineTransform();
-		g2.setColor(getBackground());
+        // hent bredde og højde og læg padding til
+        double h = getHeight() - 20;
+        double b = getWidth() - 20;
+        deltaX = b / (maxX - minX);
+        deltaY = h / (maxY - minY);
+        double origoX = -(double) minX * deltaX + 10;
+        double origoY = h + (double) (minY) * deltaY + 10;
 
-		// hent bredde og højde og læg padding til
-		double h = getHeight() - 20;
-		double b = getWidth() - 20;
-		double deltaX = b / (maxX - minX);
-		double deltaY = h / (maxY - minY);
-		double origoX = -(double) minX * deltaX + 10;
-		double origoY = h + (double) (minY) * deltaY + 10;
+        af.setToTranslation(origoX, origoY);
+        g2.transform(af);
 
-		af.setToTranslation(origoX, origoY);
-		g2.transform(af);
-		
-		// Tilret til 'bruger'-koordinatsystem
-		af.setToScale(deltaX, -deltaY);
-		g2.transform(af);
+        // Tilret til 'bruger'-koordinatsystem
+        af.setToScale(1, -1);
+        g2.transform(af);
 
-		drawAxis(g2);
-		drawGraph(g2);
-	}
+        drawAxis(g2);
+        drawGraph(g2);
+    }
 
-	@Override
-	public void drawAxis(Graphics2D g) {
-		g.setColor(Color.BLACK);
-		for (int i = (minX / trinX) * trinX; i <= maxX; i += trinX) {
-			g.drawLine(i, 0, i, 10);
-		}
-		for (int i = (minY / trinY) * trinY; i <= maxY; i += trinY) {
-			g.drawLine(0, i, 10, i);
-		}
-		g.drawLine(minX, 0, maxX, 0);
-		g.drawLine(0, minY, 0, maxY);
-	}
+    public void drawAxis(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        for (int i = 0; i <= maxX; i += trinX) {
+            g.draw(new Line2D.Double((i * deltaX), 0, (i * deltaX), (10 * deltaY)));
+        }
+        for (int i = 0; i <= maxY; i += trinY) {
+            g.draw(new Line2D.Double(0, (i * deltaY), (10 * deltaX), (i * deltaY)));
+        }
+        g.draw(new Line2D.Double((minX * deltaX), 0, (maxX * deltaX), 0));
+        g.draw(new Line2D.Double(0, (minY * deltaY), 0, (maxY * deltaY)));
+    }
 
-	@Override
-	public void drawGraph(Graphics2D g) {
-		g.setColor(Color.red);
-		// Hvis data er kortere maxX
-		if (dataToDraw.size() <= maxX) {
-			int j = 0;
-			for (int i = 0; i < dataToDraw.size(); i++) {
-				g.fillRect(i, dataToDraw.get(i), 2, 20);
-				//j += 20;
-			}
-		}
+    public void drawGraph(Graphics2D g) {
+        g.setColor(Color.red);
+        g.setStroke(new BasicStroke(3));
 
-		// Ellers - tegn kun maxX målinger
-		else {
-			int j = 0;
-			for (int i = 0; i < maxX; i++) {
-				g.drawRoundRect(i, dataToDraw.get(i), 2, 2, 1, 1);
-				//j += 20;
-			}
-		}
-	}
+        // Hvis data er kortere maxX
+        if (dataToDraw.size() <= maxX) {
+            for (int i = 1; i < dataToDraw.size() - 1; i++) {
+                g.draw(new Line2D.Double(((i - 1) * deltaX), (dataToDraw.get(i - 1) * deltaY), (i * deltaX),
+                        (dataToDraw.get(i) * deltaY)));
+                // g.fillRoundRect((int)(i*deltaX),
+                // (int)(dataToDraw.get(i)*deltaY), 10, 10,10,10);
+            }
+        } // Ellers - tegn kun maxX målinger
+        else {
+            for (int i = 0; i < maxX; i++) {
+                g.draw(new Line2D.Double(((i - 1) * deltaX), (dataToDraw.get(i - 1) * deltaY), (i * deltaX),
+                        (dataToDraw.get(i) * deltaY)));
+            }
+        }
+    }
+    public void setDTB(Database dtb) {
+        datb = dtb;
+    }
+    
+    @Override
+    public void begin() {
+        timer.start();
+        //this.setVisible(true);
+    }
 
-	public void setData(/* ArrayList<Integer> listen */) {
-		dataToDraw = new ArrayList<Integer>();
-		for (int i = 0; i < maxX; i++) {
-			dataToDraw.add(datb.getPuls());
-		}
-	}
+    @Override
+    public void stop() {
+        timer.stop();
+        //this.setVisible(false);
+    }
 
-	public static void main(String[] args) {
-		Graf_Pulse test = new Graf_Pulse(new Database());
-		test.begin();
-		JFrame ramme = new JFrame();
-		ramme.add(test);
-		ramme.setVisible(true);
-		ramme.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ramme.setSize(540, 540);
-	}
-
+    public void setData(/* ArrayList<Integer> listen */) {
+        dataToDraw = new ArrayList<Integer>();
+        for (int i = 0; i < maxX; i++) {
+            dataToDraw.add(datb.getPuls());
+        }
+    }
 }

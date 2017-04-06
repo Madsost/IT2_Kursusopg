@@ -1,6 +1,5 @@
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -74,6 +73,9 @@ public class GUI extends javax.swing.JPanel {
 
         menu13.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                /*
+                Der skal nok også ske noget mere her..
+                */
                 System.exit(0);
             }
         });
@@ -185,6 +187,10 @@ public class GUI extends javax.swing.JPanel {
         if (gTemp == JOptionPane.OK_OPTION) {
             System.out.println("Indtast øvre grænseværdi: " + oevreTField.getText());
             System.out.println("Indtast nedre grænseværdi: " + nedreTField.getText());
+            
+            /*
+             * Her skal der være noget validering af input.
+             * */
             String nedreT = nedreTField.getText();
             String oevreT = oevreTField.getText();
             String nedreP = nedrePField.getText();
@@ -204,19 +210,16 @@ public class GUI extends javax.swing.JPanel {
     // Metode, der sætter max temp grænse
     public void setgMaxTemp(String temp) {
         gMaxTemp.setText("" + temp);
-
     }
 
     // Metode, der sætter min temp grænse
     public void setgMinTemp(String temp) {
         gMinTemp.setText("" + temp);
-
     }
 
     // Metode, der sætter max puls grænse
     public void setgMaxPuls(String puls) {
         gMaxPuls.setText("" + puls);
-
     }
 
     // Metode, der sætter min puls grænse
@@ -301,6 +304,11 @@ public class GUI extends javax.swing.JPanel {
 
     public void start() {
         isActive = true;
+        //grafOmraade.setName("Hej");
+        
+        //System.out.println(grafOmraade.getName());
+        graf_PulseObj.begin();
+        graf_TempObj.begin();
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -310,15 +318,22 @@ public class GUI extends javax.swing.JPanel {
                 setMinMaxTemp();
                 setAktuelPuls(Main.calcPulse());
                 setMinMaxPuls();
-                tjek();
+                //tjek(); - skal ske i Main...
             }
 
         }, 0, 1000);
+        
     }
 
     public void stop() {
         isActive = false;
         timer.cancel();
+        graf_PulseObj.stop();
+        graf_TempObj.stop();
+    }
+    
+    public void update(/* skal der stå noget her? */){
+    	
     }
 
     /**
@@ -333,7 +348,6 @@ public class GUI extends javax.swing.JPanel {
 
         stop = new javax.swing.JButton();
         startKnap = new javax.swing.JButton();
-        grafOmraade = new Graf("puls",new Database());
         jLabel3 = new javax.swing.JLabel();
         aktuelPuls = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -349,7 +363,6 @@ public class GUI extends javax.swing.JPanel {
         maxTemp = new javax.swing.JTextField();
         aktuelTemp = new javax.swing.JTextField();
         jTextField16 = new javax.swing.JTextField();
-        TempGraf = new Graf("temp", new Database());
         minTemp = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -360,6 +373,10 @@ public class GUI extends javax.swing.JPanel {
         dangerLabelTemp = new javax.swing.JLabel();
         dangerLabelPuls = new javax.swing.JLabel();
         graenseKnap = new javax.swing.JButton();
+        graf_TempObj = new Graf_Temp();
+        graf_TempObj.setDTB(dtb);
+        graf_PulseObj = new Graf_Pulse();
+        graf_PulseObj.setDTB(dtb);
 
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         setPreferredSize(new java.awt.Dimension(1200, 700));
@@ -379,19 +396,6 @@ public class GUI extends javax.swing.JPanel {
             }
         });
 
-        grafOmraade.setBackground(new java.awt.Color(236, 234, 234));
-
-        javax.swing.GroupLayout grafOmraadeLayout = new javax.swing.GroupLayout(grafOmraade);
-        grafOmraade.setLayout(grafOmraadeLayout);
-        grafOmraadeLayout.setHorizontalGroup(
-            grafOmraadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        grafOmraadeLayout.setVerticalGroup(
-            grafOmraadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 177, Short.MAX_VALUE)
-        );
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Temp");
@@ -401,7 +405,7 @@ public class GUI extends javax.swing.JPanel {
         aktuelPuls.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         aktuelPuls.setForeground(new java.awt.Color(255, 0, 51));
         aktuelPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        aktuelPuls.setText("183");
+        aktuelPuls.setText("--");
         aktuelPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -458,7 +462,7 @@ public class GUI extends javax.swing.JPanel {
         aktuelTemp.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         aktuelTemp.setForeground(new java.awt.Color(51, 51, 255));
         aktuelTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        aktuelTemp.setText("37.1");
+        aktuelTemp.setText("--.-");
         aktuelTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTextField16.setBackground(new java.awt.Color(240, 240, 240));
@@ -472,20 +476,6 @@ public class GUI extends javax.swing.JPanel {
                 jTextField16ActionPerformed(evt);
             }
         });
-
-        TempGraf.setBackground(new java.awt.Color(236, 234, 234));
-        TempGraf.setPreferredSize(new java.awt.Dimension(800, 105));
-
-        javax.swing.GroupLayout TempGrafLayout = new javax.swing.GroupLayout(TempGraf);
-        TempGraf.setLayout(TempGrafLayout);
-        TempGrafLayout.setHorizontalGroup(
-            TempGrafLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 807, Short.MAX_VALUE)
-        );
-        TempGrafLayout.setVerticalGroup(
-            TempGrafLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 182, Short.MAX_VALUE)
-        );
 
         minTemp.setBackground(new java.awt.Color(240, 240, 240));
         minTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
@@ -526,6 +516,32 @@ public class GUI extends javax.swing.JPanel {
             }
         });
 
+        graf_TempObj.setBackground(new java.awt.Color(224, 221, 221));
+
+        javax.swing.GroupLayout graf_TempObjLayout = new javax.swing.GroupLayout(graf_TempObj);
+        graf_TempObj.setLayout(graf_TempObjLayout);
+        graf_TempObjLayout.setHorizontalGroup(
+            graf_TempObjLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        graf_TempObjLayout.setVerticalGroup(
+            graf_TempObjLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 182, Short.MAX_VALUE)
+        );
+
+        graf_PulseObj.setBackground(new java.awt.Color(224, 221, 221));
+
+        javax.swing.GroupLayout graf_PulseObjLayout = new javax.swing.GroupLayout(graf_PulseObj);
+        graf_PulseObj.setLayout(graf_PulseObjLayout);
+        graf_PulseObjLayout.setHorizontalGroup(
+            graf_PulseObjLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        graf_PulseObjLayout.setVerticalGroup(
+            graf_PulseObjLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 156, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -534,43 +550,7 @@ public class GUI extends javax.swing.JPanel {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(stop, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(startKnap, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(graenseKnap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dangerLabelPuls, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(dangerLabelTemp, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(maxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(aktuelTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(minTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel9)
-                                            .addComponent(jLabel10))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(gMaxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(gMinTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -585,18 +565,49 @@ public class GUI extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(maxPuls, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                                        .addComponent(maxPuls, javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(minPuls, javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(gMaxPuls, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(gMinPuls, javax.swing.GroupLayout.Alignment.LEADING)))
+                                        .addComponent(gMinPuls, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(maxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(minTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel10))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(gMaxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(gMinTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(aktuelTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(TempGraf, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
-                                        .addGap(40, 40, 40))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(grafOmraade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addContainerGap())))))))
+                                .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(graf_PulseObj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(graf_TempObj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(stop, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(startKnap, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(graenseKnap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dangerLabelPuls, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dangerLabelTemp, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -605,9 +616,9 @@ public class GUI extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
                             .addComponent(aktuelTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                            .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(maxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -621,12 +632,14 @@ public class GUI extends javax.swing.JPanel {
                             .addComponent(jLabel9)
                             .addComponent(gMaxTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(gMinTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)))
-                    .addComponent(TempGraf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(gMinTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(graf_TempObj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -652,8 +665,10 @@ public class GUI extends javax.swing.JPanel {
                                 .addComponent(gMaxPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
                                 .addComponent(gMinPuls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(grafOmraade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(graf_PulseObj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(startKnap, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dangerLabelPuls, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -711,7 +726,6 @@ public class GUI extends javax.swing.JPanel {
     }// GEN-LAST:event_aktuelTempActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel TempGraf;
     private javax.swing.JTextField aktuelPuls;
     private javax.swing.JTextField aktuelTemp;
     private javax.swing.JLabel dangerLabelPuls;
@@ -721,7 +735,8 @@ public class GUI extends javax.swing.JPanel {
     private javax.swing.JTextField gMinPuls;
     private javax.swing.JTextField gMinTemp;
     private javax.swing.JButton graenseKnap;
-    private javax.swing.JPanel grafOmraade;
+    private Graf_Pulse graf_PulseObj;
+    private Graf_Temp graf_TempObj;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
