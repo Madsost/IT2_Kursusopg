@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Timer;
 import javax.swing.JPanel;
 
-public class Graf_Temp extends Graf_Interface {
+public class Graf_Temp extends Graf_Master {
 
     private Timer timer;
     private int speed = 1000;

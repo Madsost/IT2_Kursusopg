@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public abstract class Graf_Interface extends JPanel{
+public abstract class Graf_Master extends JPanel{
     
         Timer timer;
         Database datb;        

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.awt.geom.Line2D;
 import javax.swing.*;
 
-public class Graf_Pulse extends Graf_Interface {
+public class Graf_Pulse extends Graf_Master {
 
     private Timer timer;
     private int speed = 3000;
