@@ -1,34 +1,65 @@
+import java.util.ArrayList;
 
-public class PulseSensor extends Sensor implements Runnable{
-	/*
-	 * Puls-specifikke attributter
-	 * */
-	private String type = "pulse";
-	
-	public PulseSensor(){
-		super.init(/* Måske sensortype? */); // måske
-		
-		// Noget med opsætning af tråden (eller sker det i Main?)
+import jssc.SerialPort;
+import jssc.SerialPortException;
+
+public class PulseSensor extends Sensor implements Runnable {
+
+	public String dataPuls;
+	private SerialPort port;
+	private String inputBuffer;
+	private ArrayList<String> outputBuffer = new ArrayList<>();
+
+	public PulseSensor(String portname) {
+		this.port = super.openPort(portname);
 	}
-	
+
 	@Override
-	public void init(){
-		/*
-		 * Skal vi bruge denne her metode? 
-		 */
-	}
-	
-	@Override
-	public int measure(){
-		/*
-		 * Puls-specifik metode for at hente måling. 
-		 */
-		return 0;
+	public String measure() {
+		int point = 0;
+		do {
+			try {
+				// hvis der er målinger på vej
+				if (port.getInputBufferBytesCount() > 0) {
+					inputBuffer += port.readString();
+					int pos = -1;
+					while ((pos = inputBuffer.indexOf("!")) > -1) {
+						outputBuffer.add(inputBuffer.substring(0, pos));
+						inputBuffer = inputBuffer.substring(pos + 1);
+					}
+				}
+				// Venter på at input-bufferen bliver fyldt igen
+				else
+					try {
+						Thread.sleep(75); 
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+			} catch (SerialPortException e1) {
+				e1.printStackTrace();
+			}
+			// Udskriver et punktum for hvert 200 måling (ca. hvert sekund)
+			if (outputBuffer.size() - point >= 200) {
+				System.out.print(".");
+				point = outputBuffer.size();
+			}
+
+			// størrelsen kan godt være større end sampleSize!
+		} while (outputBuffer.size() <= 1000);
+		return "";
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		while(running){
+			measure();
+			try{Thread.sleep(250);}catch(InterruptedException e){}
+		}		
+	}
+	
+	public ArrayList<String> getData(){
+		ArrayList<String> kopi = outputBuffer;
+		outputBuffer = new ArrayList<>();
+		return kopi;
 	}
 }

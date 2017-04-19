@@ -1,26 +1,58 @@
 
-public class TempSensor extends Sensor implements Runnable{
+import java.util.ArrayList;
+
+import jssc.SerialPort;
+import jssc.SerialPortException;
+
+public class TempSensor extends Sensor implements Runnable {
+	private SerialPort port;
+	private String inputBuffer;
+	private ArrayList<String> outputBuffer = new ArrayList<>();
+
 	/*
 	 * Temp-specifikke attributter
 	 */
-	
-	public TempSensor(){
-		super.init(); // MÅSKE
-		
-		// Noget andet der skal ske når vi initialiserer sensoren...
+
+	public TempSensor(String portname) {
+		this.port = super.openPort(portname);
+		this.running = true;
+		this.type = "Temperatur";
 	}
-	
-	@Override 
-	public int measure(){
-		/*
-		 * Her skal der stå noget mere.
-		 */
-		return 0;
+
+	@Override
+	public String measure() {
+		try {
+			if (port.getInputBufferBytesCount() > 0) {
+				inputBuffer = port.readString();
+			}
+		} catch (SerialPortException ex) {
+		}
+		return inputBuffer;
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		while (running) {
+			try {
+				if (measure().isEmpty())
+					continue;
+				else{
+					String test = measure();
+					outputBuffer.add(test);
+					System.out.println(test);
+				}
+					
+					
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public ArrayList<String> getData(){
+		ArrayList<String> kopi = outputBuffer;
+		outputBuffer = new ArrayList<>();
+		return kopi;
 	}
 }

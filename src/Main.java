@@ -1,5 +1,10 @@
 
 import javax.swing.*;
+
+import jssc.SerialPort;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
 import java.util.*;
 import java.util.Timer;
 import java.util.stream.*;
@@ -19,18 +24,46 @@ public class Main {
 	private PulseSensor puls;
 	private TempSensor temp;
 	private GUI gui;
-	private boolean dangerPulse;
-	private boolean dangerTemp;
+	private boolean dangerPulseHigh;
+	private boolean dangerPulseLow;
+	private boolean dangerTempLow;
+	private boolean dangerTempHigh;
+	private ArrayList<String> inputTempBuffer;
+	private ArrayList<Double> calcTempBuffer = new ArrayList<>();
+	private ArrayList<String> inputPulsBuffer;
+	private double[] calcPulsBuffer = new double[1000];
+	private ArrayList<Integer> calcPuls = new ArrayList<>();
 
 	public Main() {
-		this.dangerPulse = false;
-		this.dangerTemp = false;
+		this.dangerPulseHigh = false;
+		this.dangerPulseLow = false;
+		this.dangerTempHigh = false;
+		this.dangerTempLow = false;
+
+		init();
 	}
 
 	public void init() {
-		// Lav 2 sensor-objekter i hver deres tråd
-		temp = new TempSensor();
-		puls = new PulseSensor();
+		// Opret objekter for alle de tilsluttede
+		try{
+		Sensor sens = new Sensor();
+		String[] portNames = SerialPortList.getPortNames();
+		for (int i = 0; i < portNames.length; i++) {
+			SerialPort testPort = sens.openPort(portNames[i]);
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+			}
+			boolean isPuls = sens.testType(testPort);
+			testPort.closePort();
+			if (isPuls) {
+				System.out.println("Der blev tilsluttet en pulsmåler");
+				puls = new PulseSensor(portNames[i]);
+			} else {
+				System.out.println("Der blev tilsluttet en temperaturmåler");
+				temp = new TempSensor(portNames[i]);
+			}
+		}
 		Thread sensorT = new Thread(temp);
 		Thread sensorP = new Thread(puls);
 
@@ -47,7 +80,10 @@ public class Main {
 
 		// Opret GUI-objekt med databasen som parameter
 		gui = new GUI(datb);
-
+		}
+		catch(SerialPortException e){
+			e.printStackTrace();
+		}
 		// Mere?
 	}
 
@@ -57,20 +93,56 @@ public class Main {
 		 * Kontrollere data 3) Beregne puls/etwas 4) Gemme i databasen 4)
 		 * Opdatere GUI (måske?)
 		 */
-		// Indhent målinger
-		temp.measure(); // De skal returnere noget
-		puls.measure(); // Og hvordan kommer det til at virke?
+		
+		/*
+		 * TJEK HVILKE SENSORER DER ER AKTIVE 
+		 * Ellers stopper programmet her...
+		 */
+		inputTempBuffer = temp.getData(); // De skal returnere noget
+		inputPulsBuffer = puls.getData();
 
 		validate();
+		calcPuls.add(calculatePulse());
+		boundsCheck();
 
+		// Skriv til databasen
+		for (double x : calcTempBuffer) {
+			datb.writeTo("Temperatur", x);
+		}
+
+		for (double y : calcPuls) {
+			datb.writeTo("Pulsslag", y);
+		}
 	}
 
 	public void validate() {
 		// noget med at tjekke om data er OK inden det gemmes i databasen
+		for (int i = 0; i < inputTempBuffer.size(); i++) {
+			String buffer = inputTempBuffer.get(i);
+			if (!buffer.isEmpty() && buffer.length() == 7) {
+				try {
+					calcTempBuffer.add(Double.parseDouble(buffer.substring(2, 6)));
+				} catch (ArithmeticException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		for (int i = 0; i < inputPulsBuffer.size(); i++) {
+			String buffer = inputPulsBuffer.get(i);
+			if (!buffer.isEmpty() && i < 1000) {
+				try {
+					calcPulsBuffer[i] = Double.parseDouble(buffer);
+				} catch (ArithmeticException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 	}
 
-	public boolean boundsCheck() {
-		// en klasse til at tjekke om grænseværdierne er overskredet
+	// en klasse til at tjekke om grænseværdierne er overskredet
+	public void boundsCheck() {
 		// Der skal indhentes grænseværdier: [tl tu pl pu]
 		double[] bounds = gui.getBound();
 		double tl = bounds[0]; // temp nedre
@@ -78,15 +150,111 @@ public class Main {
 		double pl = bounds[2];
 		double pu = bounds[3];
 
-		// Her kaldes så den relevante metode i GUI
+		// tjek min og max værdier
+		double max = Double.MIN_VALUE;
+		double min = Double.MAX_VALUE;
+		for (double x : calcTempBuffer) {
+			max = (x > max) ? x : max;
+			min = (x < min) ? x : min;
+		}
+
+		// Tjek grænseværdier for temp
 		String type = "";
-		gui.advarsel(type);
-		return false;
+		if (max > tu || min < tl) {
+			type = "Temp";
+			gui.advarsel(type); // Her kaldes så den relevante metode i GUI
+		}
+
+		// Tjek min og max for puls
+		max = Double.MIN_VALUE;
+		min = Double.MAX_VALUE;
+		for (double x : calcPuls) {
+			max = (x > max) ? x : max;
+			min = (x < min) ? x : min;
+		}
+
+		// tjek grænseværdier for pulsS
+		if (max > pu || min < pl) {
+			type = "Puls";
+			gui.advarsel(type); // Her kaldes så den relevante metode i GUI
+		}
 	}
 
 	public int calculatePulse() {
-		// den ene eller den anden implementering af en pulsregneren
-		return 0;
+		// Udregner afvigelsen for 300 forskydelser
+		double[] scores = new double[300];
+		for (int j = 1; j < 301; j++) {
+			double score = 0;
+			int b = j;
+			int a = 0;
+			while (b < (calcPulsBuffer.length)) {
+				score += (calcPulsBuffer[a] - calcPulsBuffer[b]) * (calcPulsBuffer[a] - calcPulsBuffer[b]);
+				b++;
+				a++;
+			}
+			scores[j - 1] = score;
+		}
+
+		// Finder laveste værdi for bølgedale
+		boolean ned = false;
+		boolean bund = false;
+		double min = Double.MAX_VALUE;
+		for (int i = 60; i < scores.length - 1; i++) {
+			ned = (scores[i] - scores[i - 1] < 0);
+			if (i == scores.length)
+				break;
+			else {
+				bund = (scores[i + 1] - scores[i] >= 0);
+				if (bund && ned) {
+					min = (scores[i] < min) ? scores[i] : min;
+				}
+			}
+		}
+
+		// Finder første forskydning med lav nok score
+		int hit = 0;
+		for (int i = 60; i < scores.length - 1; i++) {
+			ned = (scores[i] - scores[i - 1] < 0);
+			if (i == scores.length)
+				break;
+			else {
+				bund = (scores[i + 1] - scores[i] >= 0);
+				if (bund && ned && scores[i] < (min * 1.1)) {
+					hit = i;
+					// System.out.println(i);
+					break;
+				}
+			}
+		}
+
+		try {
+			double pulsgaet = 60000 / (hit * 5);
+			System.out.println("Bedste bud: " + pulsgaet);
+			pulsListe.add((int) pulsgaet);
+		} catch (ArithmeticException e1) {
+			System.out.println("Divideret med 0");
+			System.out.println("Bedste bud: Intet bud");
+		}
+
+		// Sikrer at vi kun gemmer de forrige 3 målinger.
+		while (pulsListe.size() >= 3) {
+			pulsListe.remove(0);
+		}
+
+		// Finder gennemsnittet af denne måling og de forrige 2.
+		double jævnetPuls = 0;
+		for (double puls : pulsListe) {
+			jævnetPuls += puls;
+		}
+
+		jævnetPuls = jævnetPuls / pulsListe.size();
+
+		return (int) jævnetPuls;
+	}
+	
+	public static void main(String[] args) {
+		Main main = new Main();
+		main.run();
 	}
 
 	/*--------------- GAMMEL KODE -------------*/
@@ -217,9 +385,5 @@ public class Main {
 	 * @param args
 	 *            the command line arguments
 	 */
-	public static void main(String[] args) {
-		dtb = new Database();
-		Main main = new Main();
-		GUI gui = new GUI(dtb);
-	}
+	
 }
