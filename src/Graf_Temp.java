@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public class Graf_Temp extends Graf_Master {
 
     private Timer timer;
-    private int speed = 1000;
+    private int speed = 10000;
     private Database datb;
     private int maxX = 12;
     private int minX = 0;
@@ -33,8 +33,7 @@ public class Graf_Temp extends Graf_Master {
                 /*
 				 * dataToDraw = datb.getValues("puls");
                  */
-                //setVisible(true); - sker i begin().
-                setData(/* datb.getPulsListe() */);
+                dataToDraw = datb.getValueSet("Temperatur");
                 repaint();
             }
         };

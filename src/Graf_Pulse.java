@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Graf_Pulse extends Graf_Master {
 
     private Timer timer;
-    private int speed = 3000;
+    private int speed = 5000;
     private Database datb;
     private int maxX = 600;
     private int minX = -10;
@@ -19,10 +19,10 @@ public class Graf_Pulse extends Graf_Master {
     private int trinX = 200;
     private int trinY = 400;
     private double deltaX, deltaY;
-    private ArrayList<Integer> dataToDraw;
+    private ArrayList<Double> dataToDraw;
 
     public Graf_Pulse() {
-        dataToDraw = new ArrayList<Integer>();
+        dataToDraw = new ArrayList<>();
         ActionListener taskPerformer = new ActionListener() {
 
             @Override
@@ -30,10 +30,8 @@ public class Graf_Pulse extends Graf_Master {
                 /*
 				 * dataToDraw = datb.getValues("puls");
                  */
-                setVisible(true);
-                setData(/* datb.getPulsListe() */);
+            	dataToDraw = datb.getValueSet("Pulsliste");
                 repaint();
-
             }
         };
         timer = new Timer(speed, taskPerformer);
@@ -115,9 +113,9 @@ public class Graf_Pulse extends Graf_Master {
     }
 
     public void setData(/* ArrayList<Integer> listen */) {
-        dataToDraw = new ArrayList<Integer>();
+        dataToDraw = new ArrayList<>();
         for (int i = 0; i < maxX; i++) {
-            dataToDraw.add(datb.getPuls());
+            dataToDraw.add((double) datb.getPuls());
         }
     }
 }

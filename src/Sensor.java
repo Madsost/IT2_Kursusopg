@@ -1,4 +1,6 @@
 
+import java.util.ArrayList;
+
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -11,22 +13,13 @@ public class Sensor {
 	public boolean openPortTemp = false;
 	public boolean openPortPuls = false;
 	public boolean openPort = false;
-	protected boolean running=false;
-	public String type = "";
-	SerialPort serialPort;
+	protected boolean running = false;
+	protected String type = "";
+	protected SerialPort serialPort;
+	protected String inputBuffer = "";
+	protected ArrayList<String> outputBuffer = new ArrayList<>();
 
 	public Sensor() {
-
-		/*
-		 * Tjek om der er noget tilsluttet
-		 * 
-		 * Hvilken port er der tale om? Hvilken type er der tale om?
-		 * 
-		 * Initialiser forbindelsen
-		 * 
-		 * Begynd at måle i en daemon tråd Måske med SerialPortEvent-listener
-		 * 
-		 */
 	}
 
 	/**
@@ -34,6 +27,7 @@ public class Sensor {
 	 * hvis det er temperatur.
 	 */
 	public boolean testType(SerialPort port) {
+		System.out.println("Undersøger sensor-type...");
 		boolean tester = false;
 		String input = "";
 		try {
@@ -42,9 +36,11 @@ public class Sensor {
 				System.out.print(".");
 				if (port.getInputBufferBytesCount() > 0) {
 					input += port.readString();
+					System.out.println("\nSensor-type bestemt.");
+					break;
 				} else
-					//System.out.println("Vi modtog ikke noget");
-				Thread.sleep(1000);
+					Thread.sleep(1000);
+				// System.out.println("Vi modtog ikke noget");
 			}
 			// test tegn i målingen - led efter et '!'
 			CharSequence s = "!";
@@ -59,25 +55,23 @@ public class Sensor {
 		return tester;
 	}
 
-	/** 
-	 * Opret forbindelse til porten. 
+	/**
+	 * Opret forbindelse til porten.
+	 * 
 	 * @param portname
 	 * @return den åbnede SerialPort
 	 */
 	public SerialPort openPort(String portname) {
-		SerialPort serialPort;
+		// SerialPort serialPort;
 		try {
 			serialPort = new SerialPort(portname);
 			serialPort.openPort();
-			serialPort.setParams(9600, 8, 1, 0); // sætter parametre
+			serialPort.setParams(SerialPort.BAUDRATE_19200, 8, 1, 0); // sætter
+																		// parametre
 			serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
 			serialPort.setDTR(true);
 			System.out.println("Porten blev oprettet");
 			this.openPort = true;
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-			}
 			return serialPort;
 		} catch (SerialPortException e) {
 			System.out.println("Sensor ikke tilsluttet.");
@@ -85,7 +79,7 @@ public class Sensor {
 			return null;
 		}
 	}
-	
+
 	public String measure() {
 		/*
 		 * Tom metode. Den skal nok laves forskelligt i de to underklasser
@@ -97,39 +91,46 @@ public class Sensor {
 		/*
 		 * Hvis vi får brug for at kunne aflæse en sensors type.
 		 */
-		String type = "";
 		return type;
 	}
 	
-	public void stopIt(){
+	public ArrayList<String> getData(){
+		ArrayList<String> kopi = outputBuffer;
+		outputBuffer = new ArrayList<>();
+		return kopi;
+	}
+
+	public void stopIt() {
 		running = false;
 	}
-	
-	public void closeAll(){
+
+	public void closeAll() {
 		String[] portNames = SerialPortList.getPortNames();
 		for (int i = 0; i < portNames.length; i++) {
-			
 		}
 	}
-	
-	public static void main(String[] args) throws SerialPortException {
+
+	public static void main(String[] args) throws Throwable {
 		Sensor sens = new Sensor();
+		TempSensor tempSens = null;
 		String[] portNames = SerialPortList.getPortNames();
 		for (int i = 0; i < portNames.length; i++) {
 			SerialPort testPort = sens.openPort(portNames[i]);
-			
 			boolean isPuls = sens.testType(testPort);
 			testPort.closePort();
 			if (isPuls) {
 				System.out.println("HIP HURRA vi detekterede en pulsmåler");
 				PulseSensor pulseSens = new PulseSensor(portNames[i]);
 			} else {
-				TempSensor tempSens = new TempSensor(portNames[i]);
+				tempSens = new TempSensor(portNames[i]);
 				tempSens.run();
 			}
-
+			for (int j = 0; j < 100; j++) {
+				System.out.println(tempSens.getData().toString());
+				tempSens.notify();
+			}
+			
+			tempSens.finalize();
 		}
-
 	}
-
 }

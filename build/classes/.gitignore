@@ -1,2 +1,7 @@
 /Sensor$1.class
 /Sensor$PortReader.class
+/Sensor$SerialPortReader.class
+/TempSensor$SerialPortReader.class
+/TempSensor$1.class
+/Graf_Pulse$1.class
+/GUI$11.class

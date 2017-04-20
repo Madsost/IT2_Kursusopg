@@ -52,16 +52,17 @@ public class Database {
 
 		try {
 			DatabaseMetaData dbm = conn.getMetaData();
-			// check om "temp" tabellen allerede eksisterer
+			// check om tabellen allerede eksisterer
 			ResultSet tables = dbm.getTables(null, null, name, null);
 			if (tables.next()) {
 				// Tabellen eksisterer
 				dropTable(name);
-				// System.out.println("Tabellen eksisterer allerede");
+				Thread.sleep(1000);
+				System.out.println("Sletter gammel tabel...");
 				// writeTo();
 			}
 			// Tabellen eksisterer ikke
-			System.out.println("Tabellen eksisterer IKKE");
+			System.out.println("Opretter tabel "+name+"...");
 			stmt = conn.createStatement();
 			String message1 = "CREATE TABLE " + name;
 			stmt.executeUpdate(
@@ -69,7 +70,7 @@ public class Database {
 			// writeTo();
 			conn.commit();
 		} catch (Exception e) {
-			System.out.println("Tabel-test: " + e.getMessage());
+			System.out.println("Init table: " + e.getMessage());
 			// udskriv fejlmeddelelse
 			e.printStackTrace();
 		}
@@ -80,6 +81,7 @@ public class Database {
 			stmt.executeUpdate("DROP TABLE " + tablename);
 			conn.commit();
 		} catch (Exception e) {
+			System.out.println("Det lykkedes ikke at slette tabellen");
 		}
 	}
 
@@ -106,7 +108,7 @@ public class Database {
 		// Hent målinger fra databasen med nogle bestemte¨
 		ArrayList<Double> outputData = new ArrayList<>();
 		try {
-			System.out.println("Test af select...");
+			System.out.println("Henter målinger...");
 			// udfoer forespoergsel
 			ResultSet rset = stmt.executeQuery("SELECT " + tablename + " FROM " + user + "." + tablename);
 			conn.commit();
