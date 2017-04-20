@@ -40,10 +40,15 @@ public class Main {
 	public void init() {
 		// Opret objekter for alle de tilsluttede
 		try {
+			// init databbasen
+			datb = new Database();
+
+			// init et sensorobjekt til at teste forbindelsen. 
 			Sensor sens = new Sensor();
+			SerialPort testPort; 
 			String[] portNames = SerialPortList.getPortNames();
 			for (int i = 0; i < portNames.length; i++) {
-				SerialPort testPort = sens.openPort(portNames[i]);
+				testPort = sens.openPort(portNames[i]);
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
@@ -71,9 +76,6 @@ public class Main {
 				sensorP.setDaemon(true);
 				sensorP.start();
 			}
-
-			// init databbasen
-			datb = new Database();
 
 			// Opret GUI-objekt med databasen som parameter
 			gui = new GUI(datb);
