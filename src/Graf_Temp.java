@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Timer;
-import javax.swing.JPanel;
 
 public class Graf_Temp extends Graf_Master {
 
@@ -43,13 +42,15 @@ public class Graf_Temp extends Graf_Master {
     }
 
 
-    public void begin() {
+    @Override
+	public void begin() {
         timer.start();
         //this.setVisible(true);
     }
 
 
-    public void stop() {
+    @Override
+	public void stop() {
         timer.stop();
         //this.setVisible(false);
     }
@@ -59,7 +60,8 @@ public class Graf_Temp extends Graf_Master {
         this.datb = dtb;
     }
 
-    public void paintComponent(Graphics g) {
+    @Override
+	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform af = new AffineTransform();
@@ -71,7 +73,7 @@ public class Graf_Temp extends Graf_Master {
         deltaX = b / (maxX - minX);
         deltaY = h / (maxY - minY);
         double origoX = -(double) minX * deltaX + 15;
-        double origoY = h + (double) (minY) * deltaY + 10;
+        double origoY = h + (minY) * deltaY + 10;
 
         af.setToTranslation(origoX, origoY);
         g2.transform(af);

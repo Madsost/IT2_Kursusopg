@@ -1,13 +1,9 @@
 
-import javax.swing.*;
-
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
 import java.util.*;
-import java.util.Timer;
-import java.util.stream.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -40,8 +36,9 @@ public class Main {
 	public void init() {
 		// Opret objekter for alle de tilsluttede
 		try {
+			
 			// init databbasen
-			datb = new Database();
+			this.datb = new Database();
 
 			// init et sensorobjekt til at teste forbindelsen. 
 			Sensor sens = new Sensor();
@@ -155,6 +152,7 @@ public class Main {
 					try {
 						calcPulsBuffer[i] = Double.parseDouble(buffer);
 					} catch (ArithmeticException e) {
+						System.err.println("Ikke et tal.");
 						e.printStackTrace();
 					}
 				}

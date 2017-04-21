@@ -97,7 +97,7 @@ public class Graf extends JPanel {
 
 			if (inddataTemp.size() >= 2) {
 				for (int j = 1; j < inddataTemp.size() - 1; j++) {
-					g2.drawLine(j - 1, (inddataTemp.get(j - 1).intValue()), j, (int) (inddataTemp.get(j).intValue()));
+					g2.drawLine(j - 1, (inddataTemp.get(j - 1).intValue()), j, (inddataTemp.get(j).intValue()));
 					// g2.drawOval(j, (inddataTemp.get(j).intValue()), 1,15);
 				}
 			}
@@ -124,6 +124,7 @@ public class Graf extends JPanel {
 
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (GUI.isActive) {

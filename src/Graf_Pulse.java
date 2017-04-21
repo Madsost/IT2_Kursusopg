@@ -39,7 +39,8 @@ public class Graf_Pulse extends Graf_Master {
         //setVisible(false);
     }
 
-    public void paintComponent(Graphics g) {
+    @Override
+	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform af = new AffineTransform();
@@ -51,7 +52,7 @@ public class Graf_Pulse extends Graf_Master {
         deltaX = b / (maxX - minX);
         deltaY = h / (maxY - minY);
         double origoX = -(double) minX * deltaX + 10;
-        double origoY = h + (double) (minY) * deltaY + 10;
+        double origoY = h + (minY) * deltaY + 10;
 
         af.setToTranslation(origoX, origoY);
         g2.transform(af);
@@ -64,7 +65,8 @@ public class Graf_Pulse extends Graf_Master {
         drawGraph(g2);
     }
 
-    public void drawAxis(Graphics2D g) {
+    @Override
+	public void drawAxis(Graphics2D g) {
         g.setColor(Color.BLACK);
         for (int i = 0; i <= maxX; i += trinX) {
             g.draw(new Line2D.Double((i * deltaX), 0, (i * deltaX), (10 * deltaY)));
@@ -76,7 +78,8 @@ public class Graf_Pulse extends Graf_Master {
         g.draw(new Line2D.Double(0, (minY * deltaY), 0, (maxY * deltaY)));
     }
 
-    public void drawGraph(Graphics2D g) {
+    @Override
+	public void drawGraph(Graphics2D g) {
         g.setColor(Color.red);
         g.setStroke(new BasicStroke(3));
 

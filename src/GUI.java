@@ -6,16 +6,7 @@ import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.Box;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.*;
-import javax.swing.JTextField;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -79,6 +70,7 @@ public class GUI extends javax.swing.JPanel {
 		hej.setVisible(true);
 
 		menu13.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				/*
 				 * Der skal nok også ske noget mere her..
@@ -89,6 +81,7 @@ public class GUI extends javax.swing.JPanel {
 		// Indtast tempgrænser
 
 		menu21.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setGraense();
 				/*
@@ -334,9 +327,9 @@ public class GUI extends javax.swing.JPanel {
 
 			@Override
 			public void run() {
-				setAktuelTemp(0.0);
+				//setAktuelTemp(0.0);
 				setMinMaxTemp();
-				setAktuelPuls(0);
+				//setAktuelPuls(0);
 				setMinMaxPuls();
 			}
 
@@ -416,6 +409,7 @@ public class GUI extends javax.swing.JPanel {
 
 		stop.setText("Stop måling");
 		stop.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				stopActionPerformed(evt);
 			}
@@ -424,6 +418,7 @@ public class GUI extends javax.swing.JPanel {
 		startKnap.setForeground(new java.awt.Color(0, 153, 51));
 		startKnap.setText("Start måling");
 		startKnap.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				startKnapActionPerformed(evt);
 			}
@@ -437,7 +432,7 @@ public class GUI extends javax.swing.JPanel {
 		aktuelPuls.setBackground(new java.awt.Color(240, 240, 240));
 		aktuelPuls.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
 		aktuelPuls.setForeground(new java.awt.Color(255, 0, 51));
-		aktuelPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		aktuelPuls.setHorizontalAlignment(SwingConstants.TRAILING);
 		aktuelPuls.setText("--");
 		aktuelPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
@@ -447,7 +442,7 @@ public class GUI extends javax.swing.JPanel {
 		jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
 		maxPuls.setBackground(new java.awt.Color(240, 240, 240));
-		maxPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		maxPuls.setHorizontalAlignment(SwingConstants.TRAILING);
 		maxPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		jLabel2.setText("Max");
@@ -461,31 +456,33 @@ public class GUI extends javax.swing.JPanel {
 		jTextField12.setBackground(new java.awt.Color(240, 240, 240));
 		jTextField12.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 		jTextField12.setForeground(new java.awt.Color(255, 0, 51));
-		jTextField12.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+		jTextField12.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField12.setText("bpm");
 		jTextField12.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		jTextField12.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jTextField12ActionPerformed(evt);
 			}
 		});
 
 		gMinPuls.setBackground(new java.awt.Color(240, 240, 240));
-		gMinPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		gMinPuls.setHorizontalAlignment(SwingConstants.TRAILING);
 		gMinPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		minPuls.setBackground(new java.awt.Color(240, 240, 240));
-		minPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		minPuls.setHorizontalAlignment(SwingConstants.TRAILING);
 		minPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		gMaxPuls.setBackground(new java.awt.Color(240, 240, 240));
-		gMaxPuls.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		gMaxPuls.setHorizontalAlignment(SwingConstants.TRAILING);
 		gMaxPuls.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		maxTemp.setBackground(new java.awt.Color(240, 240, 240));
-		maxTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		maxTemp.setHorizontalAlignment(SwingConstants.TRAILING);
 		maxTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		maxTemp.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				maxTempActionPerformed(evt);
 			}
@@ -494,24 +491,25 @@ public class GUI extends javax.swing.JPanel {
 		aktuelTemp.setBackground(new java.awt.Color(240, 240, 240));
 		aktuelTemp.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
 		aktuelTemp.setForeground(new java.awt.Color(51, 51, 255));
-		aktuelTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		aktuelTemp.setHorizontalAlignment(SwingConstants.TRAILING);
 		aktuelTemp.setText("--.-");
 		aktuelTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		jTextField16.setBackground(new java.awt.Color(240, 240, 240));
 		jTextField16.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 		jTextField16.setForeground(new java.awt.Color(51, 51, 255));
-		jTextField16.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+		jTextField16.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField16.setText("C");
 		jTextField16.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		jTextField16.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jTextField16ActionPerformed(evt);
 			}
 		});
 
 		minTemp.setBackground(new java.awt.Color(240, 240, 240));
-		minTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		minTemp.setHorizontalAlignment(SwingConstants.TRAILING);
 		minTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		jLabel7.setText("Max");
@@ -523,11 +521,11 @@ public class GUI extends javax.swing.JPanel {
 		jLabel10.setText("Mingrænse");
 
 		gMaxTemp.setBackground(new java.awt.Color(240, 240, 240));
-		gMaxTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		gMaxTemp.setHorizontalAlignment(SwingConstants.TRAILING);
 		gMaxTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		gMinTemp.setBackground(new java.awt.Color(240, 240, 240));
-		gMinTemp.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+		gMinTemp.setHorizontalAlignment(SwingConstants.TRAILING);
 		gMinTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 		dangerLabelTemp.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -544,6 +542,7 @@ public class GUI extends javax.swing.JPanel {
 
 		graenseKnap.setText("Indtast grænseværdier");
 		graenseKnap.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				graenseKnapActionPerformed(evt);
 			}

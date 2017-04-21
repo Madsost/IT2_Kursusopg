@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 
 public class PulseSensor extends Sensor implements Runnable {
@@ -14,6 +16,36 @@ public class PulseSensor extends Sensor implements Runnable {
 		this.port = super.openPort(portname);
 		this.running = true;
 		this.type = "Puls";
+
+		try {
+			port.addEventListener(new SerialPortEventListener() {
+
+				@Override
+				public void serialEvent(SerialPortEvent event) {
+					try {
+						if (event.isRXCHAR() && event.getEventValue() > 0) {
+
+							inputBuffer += port.readString(event.getEventValue());
+							int pos = -1;
+							while ((pos = inputBuffer.indexOf("!")) > -1) {
+								outputBuffer.add(inputBuffer.substring(0, pos));
+								inputBuffer = inputBuffer.substring(pos + 1);
+								if(outputBuffer.size()>1000) outputBuffer = new ArrayList<>();
+							}
+
+						}
+					} catch (SerialPortException e) {
+						e.printStackTrace();
+					}
+
+				}
+			});
+		} catch (
+
+		SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -33,7 +65,7 @@ public class PulseSensor extends Sensor implements Runnable {
 				// Venter på at input-bufferen bliver fyldt igen
 				else
 					try {
-						Thread.sleep(75); 
+						Thread.sleep(75);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -50,14 +82,16 @@ public class PulseSensor extends Sensor implements Runnable {
 		} while (outputBuffer.size() <= 1000);
 		return "";
 	}
+	
+	@Override
+	public ArrayList<String> getData(){
+		ArrayList<String> kopi = outputBuffer;
+		//if(outputBuffer.size()>1000) outputBuffer = new ArrayList<>();
+		return kopi;
+	}
 
 	@Override
 	public void run() {
-		while(running){
-			measure();
-			try{Thread.sleep(250);}catch(InterruptedException e){}
-		}		
 	}
-	
-	
+
 }

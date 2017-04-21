@@ -1,9 +1,8 @@
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import jssc.SerialPort;
-import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
@@ -93,8 +92,8 @@ public class Sensor {
 		 */
 		return type;
 	}
-	
-	public ArrayList<String> getData(){
+
+	public ArrayList<String> getData() {
 		ArrayList<String> kopi = outputBuffer;
 		outputBuffer = new ArrayList<>();
 		return kopi;
@@ -113,6 +112,9 @@ public class Sensor {
 	public static void main(String[] args) throws Throwable {
 		Sensor sens = new Sensor();
 		TempSensor tempSens = null;
+		PulseSensor pulseSens = null;
+		ArrayList<String> input = new ArrayList<>();
+		Thread tråd;
 		String[] portNames = SerialPortList.getPortNames();
 		for (int i = 0; i < portNames.length; i++) {
 			SerialPort testPort = sens.openPort(portNames[i]);
@@ -120,17 +122,31 @@ public class Sensor {
 			testPort.closePort();
 			if (isPuls) {
 				System.out.println("HIP HURRA vi detekterede en pulsmåler");
-				PulseSensor pulseSens = new PulseSensor(portNames[i]);
+				pulseSens = new PulseSensor(portNames[i]);
 			} else {
 				tempSens = new TempSensor(portNames[i]);
-				tempSens.run();
 			}
-			for (int j = 0; j < 100; j++) {
-				System.out.println(tempSens.getData().toString());
-				tempSens.notify();
+
+			tråd = new Thread(pulseSens);
+			tråd.start();
+			synchronized (tråd) {
+				for (int j = 0; j < 100; j++) {
+					System.out.println("Hej?");
+					input = pulseSens.getData();
+					System.out.println("Vi kaldte en metode");
+					try {
+						System.out.println(input.toString() + "\nAntal målinger: " + input.size());
+
+						Thread.sleep(3000);
+					} catch (ConcurrentModificationException e) {
+						System.err.println(
+								"Der blev foretaget en ændring i listen samtidig med at der blev udført en handling derpå.");
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
-			
-			tempSens.finalize();
 		}
 	}
 }

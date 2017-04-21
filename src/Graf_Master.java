@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -19,7 +18,8 @@ public abstract class Graf_Master extends JPanel{
     
     abstract void begin();
     
-    public void paintComponent(Graphics g){
+    @Override
+	public void paintComponent(Graphics g){
         super.paintComponent(g);
     }
 
