@@ -109,14 +109,15 @@ public class Database {
 		ArrayList<Double> outputData = new ArrayList<>();
 		try {
 			System.out.println("Henter målinger...");
-			// udfoer forespoergsel
-			ResultSet rset = stmt.executeQuery("SELECT " + tablename + " FROM " + user + "." + tablename);
+			// udfoer forespoergsel - modtag målingerne aftagende, så den seneste måling kommer på plads 0 i listen.
+			ResultSet rset = stmt.executeQuery("SELECT * FROM " + user + "." + tablename+" ORDER BY id DESC");
 			conn.commit();
 			while (rset.next()) {
 				outputData.add(rset.getDouble(1));
 				// System.out.println("test af løkke");
 			}
 		} catch (Exception e) {
+			System.err.println("Fejl ved hentning fra databasen: "+e.getMessage());
 		}
 		return outputData;
 	}

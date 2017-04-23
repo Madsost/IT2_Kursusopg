@@ -17,35 +17,7 @@ public class PulseSensor extends Sensor implements Runnable {
 		this.running = true;
 		this.type = "Puls";
 
-		try {
-			port.addEventListener(new SerialPortEventListener() {
-
-				@Override
-				public void serialEvent(SerialPortEvent event) {
-					try {
-						if (event.isRXCHAR() && event.getEventValue() > 0) {
-
-							inputBuffer += port.readString(event.getEventValue());
-							int pos = -1;
-							while ((pos = inputBuffer.indexOf("!")) > -1) {
-								outputBuffer.add(inputBuffer.substring(0, pos));
-								inputBuffer = inputBuffer.substring(pos + 1);
-								if(outputBuffer.size()>1000) outputBuffer = new ArrayList<>();
-							}
-
-						}
-					} catch (SerialPortException e) {
-						e.printStackTrace();
-					}
-
-				}
-			});
-		} catch (
-
-		SerialPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	@Override
@@ -92,6 +64,35 @@ public class PulseSensor extends Sensor implements Runnable {
 
 	@Override
 	public void run() {
+		try {
+			port.addEventListener(new SerialPortEventListener() {
+
+				@Override
+				public void serialEvent(SerialPortEvent event) {
+					try {
+						if (event.isRXCHAR() && event.getEventValue() > 0) {
+
+							inputBuffer += port.readString(event.getEventValue());
+							int pos = -1;
+							while ((pos = inputBuffer.indexOf("!")) > -1) {
+								outputBuffer.add(inputBuffer.substring(0, pos));
+								inputBuffer = inputBuffer.substring(pos + 1);
+								if(outputBuffer.size()>1000) outputBuffer = new ArrayList<>();
+							}
+
+						}
+					} catch (SerialPortException e) {
+						e.printStackTrace();
+					}
+
+				}
+			});
+		} catch (
+
+		SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
