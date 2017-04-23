@@ -1,5 +1,8 @@
 import java.sql.*;
 import java.util.*;
+
+import com.mysql.jdbc.CommunicationsException;
+
 public class Database {
 
 	/*
@@ -33,13 +36,24 @@ public class Database {
 			password = "dtu165263F17"; // MySQL kodeord
 
 			conn = DriverManager.getConnection(url, user, password);
-			conn.setAutoCommit(false);
+			// conn.setAutoCommit(false);
+
 			// opret forbindelsesobjekt
 			System.out.println("Der er oprettet forbindelse til databasen");
 			initTable("Pulsslag");
 			initTable("Temperatur");
 
-		} catch (Exception e) {
+		} catch (CommunicationsException ex) {
+			ex.printStackTrace();
+			System.out.println();
+			System.exit(0);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (InstantiationException e2) {
+			e2.printStackTrace();
+		} catch (IllegalAccessException e3) {
+			e3.printStackTrace();
+		} catch (SQLException e) {
 			System.out.println("Database-test: " + e.getMessage());
 			// udskriv fejlmeddelelse
 			e.printStackTrace(); // udskriv stacktrace
@@ -51,24 +65,16 @@ public class Database {
 	public void initTable(String name) {
 
 		try {
-			DatabaseMetaData dbm = conn.getMetaData();
-			// check om tabellen allerede eksisterer
-			ResultSet tables = dbm.getTables(null, null, name, null);
-			if (tables.next()) {
-				// Tabellen eksisterer
-				dropTable(name);
-				Thread.sleep(1000);
-				System.out.println("Sletter gammel tabel...");
-				// writeTo();
-			}
+			// Slet tabel fra forrige session
+			dropTable(name);
+
 			// Tabellen eksisterer ikke
-			System.out.println("Opretter tabel "+name+"...");
+			System.out.println("Opretter tabel " + name + "...");
 			stmt = conn.createStatement();
 			String message1 = "CREATE TABLE " + name;
 			stmt.executeUpdate(
 					message1 + "(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " + name + " DOUBLE NOT NULL DEFAULT 0)");
-			// writeTo();
-			conn.commit();
+			// conn.commit();
 		} catch (Exception e) {
 			System.out.println("Init table: " + e.getMessage());
 			// udskriv fejlmeddelelse
@@ -78,9 +84,11 @@ public class Database {
 
 	public void dropTable(String tablename) {
 		try {
+			stmt = conn.createStatement();
 			stmt.executeUpdate("DROP TABLE " + tablename);
-			conn.commit();
+			// conn.commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Det lykkedes ikke at slette tabellen");
 		}
 	}
@@ -95,7 +103,7 @@ public class Database {
 			// her sætter vi value
 			stmt2.setDouble(2, value);
 			stmt2.executeUpdate();
-			conn.commit();
+			// conn.commit();
 			// System.out.println("test af write to");
 			// getValue();
 		} catch (SQLException e) {
@@ -108,115 +116,19 @@ public class Database {
 		// Hent målinger fra databasen med nogle bestemte¨
 		ArrayList<Double> outputData = new ArrayList<>();
 		try {
-			System.out.println("Henter målinger...");
-			// udfoer forespoergsel - modtag målingerne aftagende, så den seneste måling kommer på plads 0 i listen.
-			ResultSet rset = stmt.executeQuery("SELECT * FROM " + user + "." + tablename+" ORDER BY id DESC");
-			conn.commit();
+			// System.out.println("Henter målinger...");
+			// udfoer forespoergsel - modtag målingerne aftagende, så den
+			// seneste måling kommer på plads 0 i listen.
+			stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery("SELECT * FROM " + user + "." + tablename + " ORDER BY id DESC");
+			// conn.commit();
 			while (rset.next()) {
-				outputData.add(rset.getDouble(1));
+				outputData.add(rset.getDouble(2));
 				// System.out.println("test af løkke");
 			}
 		} catch (Exception e) {
-			System.err.println("Fejl ved hentning fra databasen: "+e.getMessage());
+			e.printStackTrace();
 		}
 		return outputData;
 	}
-
-	public static void main(String[] args) {
-
-		Database test = new Database();
-
-		for (int i = 0; i < 20; i++) {
-			test.writeTo("Temperatur", genererMaaling());
-		}
-
-		ArrayList<Double> output = new ArrayList<>();
-		output = test.getValueSet("Temperatur");
-		for (double ting : output) {
-			System.out.println(ting);
-		}
-
-		test.dropTable("Pulsslag");
-		// test.dropTable("Temperatur");
-		System.exit(0);
-	}
-
-	// --------- GAMMEL KODE ------------- //
-
-	static double value = 168;
-	private ArrayList<Double> temperaturListe;
-	private ArrayList<Integer> pulsListe;
-	private int tempKald = 0;
-	private int pulsKald = 0;
-
-	/*
-	 * public Database() { File temperatur = new File("Temperatur.txt"); File
-	 * puls = new File("puls.txt"); try { Scanner input = new Scanner(new
-	 * FileReader(temperatur)); Scanner input2 = new Scanner(new
-	 * FileReader(puls)); temperaturListe = new ArrayList<>(); pulsListe = new
-	 * ArrayList<>(); while (input.hasNext()) {
-	 * temperaturListe.add(Double.parseDouble(input.nextLine()));
-	 * 
-	 * } while (input2.hasNext()) {
-	 * pulsListe.add(Integer.parseInt(input2.nextLine()));
-	 * 
-	 * } } catch (IOException e1) { e1.printStackTrace();
-	 * 
-	 * } }
-	 */
-
-	public double getTemp() {
-		if (tempKald < temperaturListe.size()) {
-			double maaling = temperaturListe.get(tempKald);
-			// maaling = (maaling * 4 / 50) + 24;
-			tempKald++;
-			return maaling;
-		} else {
-			tempKald = 0;
-			double maaling = temperaturListe.get(tempKald);
-			// maaling = (maaling * 4 / 50) + 24;
-			tempKald++;
-			return maaling;
-		}
-	}
-
-	public int getPuls() {
-		if (pulsKald < pulsListe.size()) {
-			int maaling = pulsListe.get(pulsKald);
-			pulsKald++;
-			return maaling;
-		} else {
-			pulsKald = 0;
-			int maaling = pulsListe.get(pulsKald);
-			pulsKald++;
-			return maaling;
-		}
-	}
-
-	/*
-	 * public static void main(String[] args) { Database test = new Database();
-	 * for (int i = 0; i < 20; i++) { System.out.println("Puls:" +
-	 * test.getPuls()); System.out.println("Temp:" + test.getTemp());
-	 * 
-	 * } }
-	 */
-
-	public ArrayList<Integer> getPulsListe() {
-		return pulsListe;
-	}
-
-	public static double genererMaaling() {
-		value += (2 * Math.random() - 1.0) * 0.25;
-		if (value < 0) {
-			value = 0;
-		}
-		if (value > 255) {
-			value = 255;
-		}
-
-		value = (value * 4 / 50) + 24;
-
-		return value;
-	}
-
 }

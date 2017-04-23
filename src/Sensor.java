@@ -35,6 +35,7 @@ public class Sensor {
 				System.out.print(".");
 				if (port.getInputBufferBytesCount() > 0) {
 					input += port.readString();
+					System.out.println(input);
 					System.out.println("\nSensor-type bestemt.");
 					break;
 				} else

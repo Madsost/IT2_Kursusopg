@@ -36,20 +36,20 @@ public class Main {
 	public void init() {
 		// Opret objekter for alle de tilsluttede
 		try {
-			
+
 			// init databbasen
 			this.datb = new Database();
 
-			// init et sensorobjekt til at teste forbindelsen. 
+			// init et sensorobjekt til at teste forbindelsen.
 			Sensor sens = new Sensor();
-			SerialPort testPort; 
+			SerialPort testPort;
 			String[] portNames = SerialPortList.getPortNames();
 			for (int i = 0; i < portNames.length; i++) {
 				testPort = sens.openPort(portNames[i]);
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-				}
+				/*
+				 * try { Thread.sleep(3000); } catch (InterruptedException e) {
+				 * }
+				 */
 				boolean isPuls = sens.testType(testPort);
 				testPort.closePort();
 				if (isPuls) {
@@ -76,6 +76,7 @@ public class Main {
 
 			// Opret GUI-objekt med databasen som parameter
 			gui = new GUI(datb);
+			//gui.start();
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
@@ -88,6 +89,7 @@ public class Main {
 		 * Kontrollere data 3) Beregne puls/etwas 4) Gemme i databasen 4)
 		 * Opdatere GUI (måske?)
 		 */
+		
 		while (running) {
 			/*
 			 * TJEK HVILKE SENSORER DER ER AKTIVE Ellers stopper programmet
@@ -97,7 +99,8 @@ public class Main {
 				inputTempBuffer = temp.getData(); // De skal returnere noget
 			if (puls != null) {
 				inputPulsBuffer = puls.getData();
-				calcPuls.add(calculatePulse());
+				if (inputPulsBuffer.size() > 300)
+					calcPuls.add(calculatePulse());
 			}
 
 			validate();
@@ -105,24 +108,22 @@ public class Main {
 
 			// Skriv til databasen
 			if (temp != null) {
-				int k = calcTempBuffer.lastIndexOf(calcTempBuffer);
-				if (k > 0)
-					gui.setAktuelTemp(calcTempBuffer.get(k));
 				for (double x : calcTempBuffer) {
 					datb.writeTo("Temperatur", x);
+					System.out.println("Før database: "+x);
+					calcTempBuffer = new ArrayList<>();
 				}
 			}
 
 			if (puls != null) {
-				int k2 = calcPuls.lastIndexOf(calcPuls);
-				if (k2 > 0)
-					gui.setAktuelPuls(calcPuls.get(k2));
 				for (double y : calcPuls) {
 					datb.writeTo("Pulsslag", y);
+					System.out.println("Før database (puls): "+y);
+					calcPuls = new ArrayList<>();
 				}
 			}
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				System.out.println("Afbrudt i main");
 				e.printStackTrace();
@@ -150,7 +151,11 @@ public class Main {
 				String buffer = inputPulsBuffer.get(i);
 				if (!buffer.isEmpty() && i < 1000) {
 					try {
-						calcPulsBuffer[i] = Double.parseDouble(buffer);
+						// Fjern bogstaver fra strengen (vha et regex udtryk)
+						buffer.replaceAll("[A-Za-z]+", "");
+						double test = Double.parseDouble(buffer);
+						if (test < 5.0)
+							calcPulsBuffer[i] = test;
 					} catch (ArithmeticException e) {
 						System.err.println("Ikke et tal.");
 						e.printStackTrace();

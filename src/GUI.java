@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.event.*;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,10 +24,9 @@ public class GUI extends javax.swing.JPanel {
 	private double latestTemp = 0;
 	private double minTemperatur = 2000;
 	private double maxTemperatur = 0;
-	private int minPulse = 2000;
-	private int maxPulse = 0;
-	private int latestPuls = 0;
-	private int thisPuls = 0;
+	private double minPulse = 2000;
+	private double maxPulse = 0;
+	private double latestPuls = 0;
 	private double oevreTemp = 0;
 	private double nedreTemp = 0;
 	private double oevrePuls = 0;
@@ -84,53 +84,8 @@ public class GUI extends javax.swing.JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setGraense();
-				/*
-				 * 
-				 * JTextField xField = new JTextField(5); JTextField yField =
-				 * new JTextField(5);
-				 * 
-				 * JPanel gTempBoks = new JPanel(); gTempBoks.add(new
-				 * JLabel("Indtast øvre grænseværdi: ")); gTempBoks.add(xField);
-				 * gTempBoks.add(Box.createHorizontalStrut(15)); // a spacer
-				 * gTempBoks.add(new JLabel("Indtast nedre grænseværdi:"));
-				 * gTempBoks.add(yField);
-				 * 
-				 * int gTemp = JOptionPane.showConfirmDialog(null, gTempBoks,
-				 * "Temperatur ", JOptionPane.OK_CANCEL_OPTION); if (gTemp ==
-				 * JOptionPane.OK_OPTION) {
-				 * System.out.println("Indtast øvre grænseværdi: " +
-				 * xField.getText());
-				 * System.out.println("Indtast nedre grænseværdi: " +
-				 * yField.getText()); String nedre = yField.getText(); String
-				 * oevre = xField.getText();
-				 * 
-				 * setgMaxTemp(oevre); setgMinTemp(nedre); }
-				 */
 			}
-
 		});
-
-		/*
-		 * // Indtast pulsgrænser menu22.addActionListener(new ActionListener()
-		 * { public void actionPerformed(ActionEvent e) { JTextField xField =
-		 * new JTextField(5); JTextField yField = new JTextField(5);
-		 * 
-		 * JPanel gPulsBoks = new JPanel(); gPulsBoks.add(new
-		 * JLabel("Indtast øvre grænseværdi: ")); gPulsBoks.add(xField);
-		 * gPulsBoks.add(Box.createHorizontalStrut(15)); // a spacer
-		 * gPulsBoks.add(new JLabel("Indtast nedre grænseværdi:"));
-		 * gPulsBoks.add(yField);
-		 * 
-		 * int gTemp = JOptionPane.showConfirmDialog(null, gPulsBoks, "Puls: ",
-		 * JOptionPane.OK_CANCEL_OPTION); if (gTemp == JOptionPane.OK_OPTION) {
-		 * System.out.println("Øvre grænseværdi: " + xField.getText());
-		 * System.out.println("Nedre grænseværdi: " + yField.getText());
-		 * 
-		 * String nedre = yField.getText(); String oevre = xField.getText();
-		 * setgMaxPuls(oevre); setgMinPuls(nedre); } }
-		 * 
-		 * });
-		 */
 
 		menu11.addActionListener(new ActionListener() {
 
@@ -193,24 +148,25 @@ public class GUI extends javax.swing.JPanel {
 			String oevreP = oevrePField.getText();
 			if (!nedreT.isEmpty() && !nedreT.equals("")) {
 				double buff = Double.parseDouble(nedreT);
-				if (buff != 0 && buff > 0)
+				// Må ikke være negativ og ikke være 0.
+				if (buff < 40 && buff > 0)
 					setgMinTemp(buff);
 			}
 
 			if (!oevreT.isEmpty() && !oevreT.equals("")) {
 				double buff = Double.parseDouble(oevreT);
-				if (buff != 0 && buff > 0)
+				if (buff > 30 && buff > 0)
 					setgMaxTemp(buff);
 			}
 			if (!oevreP.isEmpty() && !oevreP.equals("")) {
 				double buff = Double.parseDouble(oevreP);
-				if (buff != 0 && buff > 0)
+				if (buff < 200 && buff > 0)
 					setgMaxPuls(buff);
 			}
 
 			if (!nedreP.isEmpty() && !nedreP.equals("")) {
 				double buff = Double.parseDouble(nedreP);
-				if (buff != 0 && buff > 0)
+				if (buff < 60 && buff > 0)
 					setgMinPuls(buff);
 			}
 		}
@@ -240,26 +196,6 @@ public class GUI extends javax.swing.JPanel {
 		nedrePuls = puls;
 	}
 
-	// Metode, der skal tjekke om den aktuelle temperatur er den højest eller
-	// laveste målt
-	public void måltTemp(int temp) {
-
-		// if (temp < maxTemp)
-	}
-
-	// Metode, der skal tjekke om den aktuelle puls er den højest eller laveste
-	// målt
-	public void måltPuls(int puls) {
-
-		// maxPuls = Integer.parseInt(maxPuls);
-
-		/*
-		 * if (puls > maxTemp){ maxPuls = "" + puls maxPuls.setText(); } else
-		 * if(puls < minTemp){ minPuls = }
-		 * 
-		 */
-	}
-
 	public static boolean isActive() {
 		isActive = false;
 		return isActive;
@@ -272,23 +208,27 @@ public class GUI extends javax.swing.JPanel {
 	}
 
 	public void setMinMaxTemp() {
-		minTemperatur = (latestTemp < minTemperatur) ? latestTemp : minTemperatur;
-		maxTemperatur = (latestTemp > maxTemperatur) ? latestTemp : maxTemperatur;
-		DecimalFormat df = new DecimalFormat("#.00");
-		minTemp.setText(df.format(minTemperatur));
-		maxTemp.setText(df.format(maxTemperatur));
+		if (latestTemp > 0) {
+			minTemperatur = (latestTemp < minTemperatur) ? latestTemp : minTemperatur;
+			maxTemperatur = (latestTemp > maxTemperatur) ? latestTemp : maxTemperatur;
+			DecimalFormat df = new DecimalFormat("#.00");
+			minTemp.setText(df.format(minTemperatur));
+			maxTemp.setText(df.format(maxTemperatur));
+		}
 	}
 
-	public void setAktuelPuls(int aktPuls) {
+	public void setAktuelPuls(double aktPuls) {
 		latestPuls = aktPuls;
 		aktuelPuls.setText("" + aktPuls);
 	}
 
 	public void setMinMaxPuls() {
-		minPulse = (latestPuls < minPulse) ? latestPuls : minPulse;
-		maxPulse = (latestPuls > maxPulse) ? latestPuls : maxPulse;
-		maxPuls.setText("" + maxPulse);
-		maxPuls.setText("" + minPulse);
+		if (latestPuls > 0) {
+			minPulse = (latestPuls < minPulse) ? latestPuls : minPulse;
+			maxPulse = (latestPuls > maxPulse) ? latestPuls : maxPulse;
+			maxPuls.setText("" + maxPulse);
+			minPuls.setText("" + minPulse);
+		}
 	}
 
 	public void advarsel(String parameter) {
@@ -317,9 +257,6 @@ public class GUI extends javax.swing.JPanel {
 
 	public void start() {
 		isActive = true;
-		// grafOmraade.setName("Hej");
-
-		// System.out.println(grafOmraade.getName());
 		graf_PulseObj.begin();
 		graf_TempObj.begin();
 		timer = new Timer();
@@ -327,9 +264,13 @@ public class GUI extends javax.swing.JPanel {
 
 			@Override
 			public void run() {
-				//setAktuelTemp(0.0);
+				ArrayList<Double> buffer = dtb.getValueSet("Temperatur");
+				if (buffer.size() > 0)
+					setAktuelTemp(buffer.get(0));
 				setMinMaxTemp();
-				//setAktuelPuls(0);
+				buffer = dtb.getValueSet("Pulsslag");
+				if (buffer.size() > 0)
+					setAktuelPuls(buffer.get(0));
 				setMinMaxPuls();
 			}
 
@@ -342,10 +283,6 @@ public class GUI extends javax.swing.JPanel {
 		timer.cancel();
 		graf_PulseObj.stop();
 		graf_TempObj.stop();
-	}
-
-	public void updatePulse(int puls) {
-		this.thisPuls = puls;
 	}
 
 	/*
@@ -400,9 +337,9 @@ public class GUI extends javax.swing.JPanel {
 		dangerLabelPuls = new javax.swing.JLabel();
 		graenseKnap = new javax.swing.JButton();
 		graf_TempObj = new Graf_Temp();
-		graf_TempObj.setDTB(dtb);
+		graf_TempObj.setDTB(this.dtb);
 		graf_PulseObj = new Graf_Pulse();
-		graf_PulseObj.setDTB(dtb);
+		graf_PulseObj.setDTB(this.dtb);
 
 		setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 		setPreferredSize(new java.awt.Dimension(1200, 700));
