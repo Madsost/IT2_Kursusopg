@@ -18,29 +18,11 @@ public class TempSensor extends Sensor implements Runnable {
 			port.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
 			port.setDTR(true);
 			this.running = true;
-			this.type = "Temperatur";
 
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public String measure() {
-		boolean wait = true;
-		while (wait) {
-			try {
-				if (port.getInputBufferBytesCount() > 0) {
-					inputBuffer = port.readString();
-					wait = false;
-				} else
-					Thread.sleep(1000);
-			} catch (SerialPortException ex) {
-			} catch (InterruptedException e) {
-			}
-		}
-		return inputBuffer;
 	}
 
 	@Override

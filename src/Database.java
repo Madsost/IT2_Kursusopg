@@ -55,9 +55,10 @@ public class Database {
 			e3.printStackTrace();
 		} catch (SQLException e) {
 			System.out.println("Database-test: " + e.getMessage());
+			System.out.println("Programmet afsluttes");
 			// udskriv fejlmeddelelse
 			e.printStackTrace(); // udskriv stacktrace
-
+			System.exit(0);
 		}
 		// afslut program paent
 	}

@@ -9,11 +9,7 @@ import jssc.SerialPortList;
 // Forældreklasse til Sensorne
 public class Sensor {
 
-	public boolean openPortTemp = false;
-	public boolean openPortPuls = false;
-	public boolean openPort = false;
 	protected boolean running = false;
-	protected String type = "";
 	protected SerialPort serialPort;
 	protected String inputBuffer = "";
 	protected ArrayList<String> outputBuffer = new ArrayList<>();
@@ -35,7 +31,7 @@ public class Sensor {
 				System.out.print(".");
 				if (port.getInputBufferBytesCount() > 0) {
 					input += port.readString();
-					System.out.println(input);
+					//System.out.println(input);
 					System.out.println("\nSensor-type bestemt.");
 					break;
 				} else
@@ -71,83 +67,16 @@ public class Sensor {
 			serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
 			serialPort.setDTR(true);
 			System.out.println("Porten blev oprettet");
-			this.openPort = true;
 			return serialPort;
 		} catch (SerialPortException e) {
 			System.out.println("Sensor ikke tilsluttet.");
-			openPortTemp = false;
 			return null;
 		}
-	}
-
-	public String measure() {
-		/*
-		 * Tom metode. Den skal nok laves forskelligt i de to underklasser
-		 */
-		return "";
-	}
-
-	public String getType() {
-		/*
-		 * Hvis vi får brug for at kunne aflæse en sensors type.
-		 */
-		return type;
 	}
 
 	public ArrayList<String> getData() {
 		ArrayList<String> kopi = outputBuffer;
 		outputBuffer = new ArrayList<>();
 		return kopi;
-	}
-
-	public void stopIt() {
-		running = false;
-	}
-
-	public void closeAll() {
-		String[] portNames = SerialPortList.getPortNames();
-		for (int i = 0; i < portNames.length; i++) {
-		}
-	}
-
-	public static void main(String[] args) throws Throwable {
-		Sensor sens = new Sensor();
-		TempSensor tempSens = null;
-		PulseSensor pulseSens = null;
-		ArrayList<String> input = new ArrayList<>();
-		Thread tråd;
-		String[] portNames = SerialPortList.getPortNames();
-		for (int i = 0; i < portNames.length; i++) {
-			SerialPort testPort = sens.openPort(portNames[i]);
-			boolean isPuls = sens.testType(testPort);
-			testPort.closePort();
-			if (isPuls) {
-				System.out.println("HIP HURRA vi detekterede en pulsmåler");
-				pulseSens = new PulseSensor(portNames[i]);
-			} else {
-				tempSens = new TempSensor(portNames[i]);
-			}
-
-			tråd = new Thread(pulseSens);
-			tråd.start();
-			synchronized (tråd) {
-				for (int j = 0; j < 100; j++) {
-					System.out.println("Hej?");
-					input = pulseSens.getData();
-					System.out.println("Vi kaldte en metode");
-					try {
-						System.out.println(input.toString() + "\nAntal målinger: " + input.size());
-
-						Thread.sleep(3000);
-					} catch (ConcurrentModificationException e) {
-						System.err.println(
-								"Der blev foretaget en ændring i listen samtidig med at der blev udført en handling derpå.");
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
 	}
 }
