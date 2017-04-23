@@ -7,8 +7,8 @@ import javax.swing.Timer;
 
 public abstract class Graf_Master extends JPanel {
 
-	Timer timer;
-	Database datb;
+	protected Timer timer;
+	protected Database datb;
 	protected ArrayList<Double> dataToDraw;
 	protected int maxX, minX, minY, maxY, speed, trinY;
 	protected double trinX, deltaX, deltaY;

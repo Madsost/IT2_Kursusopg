@@ -7,19 +7,11 @@ import jssc.SerialPortException;
 
 public class PulseSensor extends Sensor implements Runnable {
 
-	public String dataPuls;
 	private SerialPort port;
 
 	public PulseSensor(String portname) {
 		this.port = super.openPort(portname);
 		this.running = true;
-	}
-
-	@Override
-	public ArrayList<String> getData() {
-		ArrayList<String> kopi = outputBuffer;
-		outputBuffer = new ArrayList<>();
-		return kopi;
 	}
 
 	@Override

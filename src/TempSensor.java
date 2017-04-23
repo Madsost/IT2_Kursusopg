@@ -7,7 +7,6 @@ import jssc.SerialPortException;
 
 public class TempSensor extends Sensor implements Runnable {
 	private SerialPort port;
-	private ArrayList<String> outputBuffer = new ArrayList<>();
 	private String buffer = "";
 
 	public TempSensor(String portname) {
@@ -23,13 +22,6 @@ public class TempSensor extends Sensor implements Runnable {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public ArrayList<String> getData() {
-		ArrayList<String> kopi = outputBuffer;
-		outputBuffer = new ArrayList<>();
-		return kopi;
 	}
 
 	@Override

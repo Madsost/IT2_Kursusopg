@@ -33,7 +33,7 @@ public class GUI extends javax.swing.JPanel {
 	private double nedrePuls = 0;
 	private boolean isRunning = false;
 	private Timer timer = new Timer();
-        private ImageIcon icon = new ImageIcon(getClass().getResource("exclamation-mark.png"));
+    private ImageIcon icon = new ImageIcon(getClass().getResource("exclamation-mark.png"));
 
 	/**
 	 * Creates new form EtPanel
