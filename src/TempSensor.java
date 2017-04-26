@@ -21,7 +21,10 @@ public class TempSensor extends Sensor implements Runnable {
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
-
+	}
+	
+	public TempSensor(boolean test){
+		
 	}
 
 	@Override

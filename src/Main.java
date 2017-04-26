@@ -32,6 +32,19 @@ public class Main {
 		init();
 		running = true;
 	}
+	
+	public Main(boolean test){
+		datb = new Database(test);
+		puls = new PulseSensor(test);
+		temp = new TempSensor(test);	
+		gui = new GUI(datb);
+	}
+	
+	public void setData(ArrayList<String> inputTempBuffer,
+			ArrayList<String> inputPulsBuffer){
+		this.inputTempBuffer = inputTempBuffer;
+		this.inputPulsBuffer = inputPulsBuffer;
+	}
 
 	public void init() {
 		// Opret objekter for alle de tilsluttede
@@ -46,10 +59,7 @@ public class Main {
 			String[] portNames = SerialPortList.getPortNames();
 			for (int i = 0; i < portNames.length; i++) {
 				testPort = sens.openPort(portNames[i]);
-				/*
-				 * try { Thread.sleep(3000); } catch (InterruptedException e) {
-				 * }
-				 */
+
 				boolean isPuls = sens.testType(testPort);
 				testPort.closePort();
 				if (isPuls) {
@@ -76,7 +86,6 @@ public class Main {
 
 			// Opret GUI-objekt med databasen som parameter
 			gui = new GUI(datb);
-			//gui.start();
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
@@ -87,13 +96,12 @@ public class Main {
 		/*
 		 * Alt det der skal ske i Main. 1) Indhente målinger fra sensorer 2)
 		 * Kontrollere data 3) Beregne puls/etwas 4) Gemme i databasen 4)
-		 * Opdatere GUI (måske?)
+		 * Opdatere GUI
 		 */
 		
 		while (running) {
 			/*
-			 * TJEK HVILKE SENSORER DER ER AKTIVE Ellers stopper programmet
-			 * her...
+			 * TJEK HVILKE SENSORER DER ER AKTIVE her...
 			 */
 			if (temp != null)
 				inputTempBuffer = temp.getData(); // De skal returnere noget
@@ -110,7 +118,7 @@ public class Main {
 			if (temp != null) {
 				for (double x : calcTempBuffer) {
 					datb.writeTo("Temperatur", x);
-					System.out.println("Før database: "+x);
+					//System.out.println("Før database: "+x);
 					calcTempBuffer = new ArrayList<>();
 				}
 			}
@@ -118,7 +126,7 @@ public class Main {
 			if (puls != null) {
 				for (double y : calcPuls) {
 					datb.writeTo("Pulsslag", y);
-					System.out.println("Før database (puls): "+y);
+					//System.out.println("Før database (puls): "+y);
 					calcPuls = new ArrayList<>();
 				}
 			}
@@ -132,7 +140,7 @@ public class Main {
 	}
 
 	public void validate() {
-		// noget med at tjekke om data er OK inden det gemmes i databasen
+		// tjek om data er OK inden det gemmes i databasen
 		if (temp != null) {
 			for (int i = 0; i < inputTempBuffer.size(); i++) {
 				String buffer = inputTempBuffer.get(i);

@@ -19,6 +19,10 @@ public class Database {
 	public Database() {
 		initConn();
 	}
+	
+	public Database(boolean test){
+		
+	}
 
 	public void initConn() {
 		// Her skal vi initialisere forbindelsen til serveren

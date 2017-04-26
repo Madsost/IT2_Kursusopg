@@ -142,11 +142,11 @@ public class GUI extends javax.swing.JPanel {
 
 		int gTemp = JOptionPane.showConfirmDialog(null, gTempBoks, "Grænseværdier ", JOptionPane.OK_CANCEL_OPTION);
 		if (gTemp == JOptionPane.OK_OPTION) {
-			System.out.println("Indtast øvre grænseværdi: " + oevreTField.getText());
-			System.out.println("Indtast nedre grænseværdi: " + nedreTField.getText());
+			//System.out.println("Indtast øvre grænseværdi: " + oevreTField.getText());
+			//System.out.println("Indtast nedre grænseværdi: " + nedreTField.getText());
 
 			/*
-			 * Her skal der være noget validering af input.
+			 * Her følger validering af input.
 			 */
 			String nedreT = nedreTField.getText();
 			String oevreT = oevreTField.getText();
@@ -161,18 +161,18 @@ public class GUI extends javax.swing.JPanel {
 
 			if (!oevreT.isEmpty() && !oevreT.equals("")) {
 				double buff = Double.parseDouble(oevreT);
-				if (buff > 30 && buff > 0)
+				if (buff > 20 && buff > 0)
 					setgMaxTemp(buff);
 			}
 			if (!oevreP.isEmpty() && !oevreP.equals("")) {
 				double buff = Double.parseDouble(oevreP);
-				if (buff < 200 && buff > 0)
+				if (buff < 300 && buff > 0)
 					setgMaxPuls(buff);
 			}
 
 			if (!nedreP.isEmpty() && !nedreP.equals("")) {
 				double buff = Double.parseDouble(nedreP);
-				if (buff < 60 && buff > 0)
+				if (buff < 80 && buff > 0)
 					setgMinPuls(buff);
 			}
 		}

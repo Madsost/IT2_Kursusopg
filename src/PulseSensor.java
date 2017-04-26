@@ -13,6 +13,10 @@ public class PulseSensor extends Sensor implements Runnable {
 		this.port = super.openPort(portname);
 		this.running = true;
 	}
+	
+	public PulseSensor(boolean test){
+		
+	}
 
 	@Override
 	public void run() {
