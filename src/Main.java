@@ -33,6 +33,7 @@ public class Main {
 		running = true;
 	}
 	
+	// Til afprøvning - med "tomme" klasser
 	public Main(boolean test){
 		datb = new Database(test);
 		puls = new PulseSensor(test);
@@ -40,6 +41,7 @@ public class Main {
 		gui = new GUI(datb);
 	}
 	
+	// Til afprøvning
 	public void setData(ArrayList<String> inputTempBuffer,
 			ArrayList<String> inputPulsBuffer){
 		this.inputTempBuffer = inputTempBuffer;
