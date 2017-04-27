@@ -184,6 +184,7 @@ public class Main {
 		double tu = bounds[1];
 		double pl = bounds[2];
 		double pu = bounds[3];
+		gui.advarsel("OK");
 
 		// tjek min og max værdier
 		double max = Double.MIN_VALUE;

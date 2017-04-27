@@ -74,7 +74,7 @@ public class Sensor {
 		}
 	}
 
-	public ArrayList<String> getData() {
+	public synchronized ArrayList<String> getData() {
 		ArrayList<String> kopi = outputBuffer;
 		outputBuffer = new ArrayList<>();
 		return kopi;

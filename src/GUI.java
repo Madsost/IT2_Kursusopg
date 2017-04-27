@@ -152,6 +152,11 @@ public class GUI extends javax.swing.JPanel {
 			String oevreT = oevreTField.getText();
 			String nedreP = nedrePField.getText();
 			String oevreP = oevrePField.getText();
+			
+			// Håndtering af , i temperaturen
+			nedreT = nedreT.replace(",", ".");
+			oevreT = oevreT.replace(",", ".");
+			
 			if (!nedreT.isEmpty() && !nedreT.equals("")) {
 				double buff = Double.parseDouble(nedreT);
 				// Må ikke være negativ og ikke være 0.
@@ -220,7 +225,7 @@ public class GUI extends javax.swing.JPanel {
 
 	public void setAktuelPuls(double aktPuls) {
 		latestPuls = aktPuls;
-		aktuelPuls.setText("" + aktPuls);
+		aktuelPuls.setText("" + (int)aktPuls);
 	}
 
 	public void setMinMaxPuls() {
@@ -234,13 +239,20 @@ public class GUI extends javax.swing.JPanel {
 
 	public void advarsel(String parameter) {
 		String tester = "Puls";
+		String noWorries = "OK";
 		dangerLabelTemp.setText("Temperatur: Målinger uden for grænseområdet");
 		dangerLabelPuls.setText("Puls: Målinger uden for grænseområdet");
 		if (tester.equals(parameter)) {
 			dangerLabelPuls.setVisible(true);
-		} else {
+		}
+		else if(noWorries.equals(parameter)){
+			dangerLabelPuls.setVisible(false);
+			dangerLabelTemp.setVisible(false);
+		}
+		else {
 			dangerLabelTemp.setVisible(true);
 		}
+				
 	}
 
 	public void start() {

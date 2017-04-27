@@ -14,14 +14,9 @@ public class MainTest {
 		// Set dataset til testkørsel
 		test.setData(tempTEST, pulsTEST);
 		
-		try{Thread.sleep(20000);}catch(InterruptedException e){}
+		try{Thread.sleep(2000);}catch(InterruptedException e){}
 		
 		// Kør test på validate
 		test.validate();
-		
-		// input grænseværdier i grænsefladen
-		
-		// Kør test på grænseværdierne
-		test.boundsCheck();
 	}
 }
